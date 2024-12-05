@@ -14,8 +14,8 @@
   background: rgb(2, 0, 36); /* Fallback color */
   background: linear-gradient(
       180deg,
-      rgba(2, 0, 36, 0.7) 0%,
-      rgba(2, 0, 36, 0.5) 30%
+      rgb(0, 0, 0) 0%,
+      rgba(0, 0, 0, 0.5) 80%
     ),
     url("/home_bg.jpg"); /* Add gradient first, then the image */
   background-size: cover; /* Ensures the image covers the element */
