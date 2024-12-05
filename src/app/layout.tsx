@@ -1,4 +1,5 @@
 import './globals.css';
+import './favicon.ico'
 
 export default function RootLayout({
   children,
@@ -7,6 +8,10 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
+      <head>
+        <title>Adventure Tours</title>
+         <link rel="icon" href="./favicon.ico" />
+      </head>
       <body>{children}</body>
     </html>
   )
