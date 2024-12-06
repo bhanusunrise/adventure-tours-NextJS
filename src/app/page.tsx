@@ -1,7 +1,9 @@
 import AboutComponent from "./components/about_component";
 import Button from "./components/button";
+import ContactSection from "./components/contact";
 import Description from "./components/description";
 import Destination from "./components/destination"; // Import Destination Component
+import Footer from "./components/footer";
 import Heading from "./components/heading";
 import NavBar from "./components/navbar";
 import Package from "./components/package";
@@ -177,6 +179,49 @@ export default function Home() {
   ))}
 </div>
       </div>
+
+      {/* Contact Us Section */}
+      <div className="bg-white mt-72 md:pl-36 md:pr-36 mb-72 sm:pl-8 sm:pr-8">
+        <Heading text="Reach out us" color="text-gray-600" />
+        <div className="m-20"></div>
+        <div className="grid grid-cols-1 sm:grid-cols-4 gap-10">
+
+          <div className="col col-span-3">
+            <div className="m-10"></div>
+            <iframe 
+              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3960.269392066728!2d80.7640419!3d6.9775079!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3ae3817dd8000e6f%3A0x511d2aeb3484e3ef!2sArun%20Home%20Decor!5e0!3m2!1sen!2slk!4v1733515033206!5m2!1sen!2slk" 
+              style={{border:0, width:"100%", height:"100%"}} 
+              allowFullScreen="true" 
+              loading="lazy" 
+              referrerpolicy="no-referrer-when-downgrade">
+
+              </iframe>
+              <div className="m-10"></div>
+          </div>
+
+          <div className="col bg-yellow-300 rounded-2xl pl-4 pr-4 shadow-2xl">
+
+            <div className="m-10"></div>
+            <div className="text-center">
+              <SubHeading text="Contacts" color="text-gray-600" />
+            </div>            
+            <div className="m-10"></div>
+            <ContactSection contactType="phone" description="+94776328270" />
+            <div className="m-1"></div>
+            <ContactSection contactType="phone" description="+94762278270" />
+            <div className="m-1"></div>
+            <ContactSection contactType="address" description="No. 12, Galle Road, Colombo 7" />
+            <div className="m-1"></div>
+            <ContactSection contactType="email" description="aasanth673@gmail.com" />
+            <div className="m-10"></div>
+          </div>
+
+        </div>
+        <div className="m-28"></div>
+      </div>
+
+      {/* Footer */}
+      <Footer />
     </>
   );
 }
