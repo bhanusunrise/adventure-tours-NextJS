@@ -1,4 +1,7 @@
+'use client'
+
 import React from "react";
+import './AboutComponent.css';  // Import the CSS file
 
 interface AboutComponentProps {
   imageUrl: string;
@@ -15,19 +18,19 @@ const AboutComponent: React.FC<AboutComponentProps> = ({ imageUrl, paragraphText
     >
       {/* First Column: Background Image */}
       <div
-        className="flex-[1] min-h-[15vh] md:min-h-[40vh] rounded-2xl shadow-2xl"
+        className={`flex-[1] min-h-[15vh] md:min-h-[40vh] rounded-2xl shadow-2xl transition-transform duration-500 ease-in-out 
+          ${image_side === "left" ? "image-container-left" : "image-container"}`}
         style={{
           backgroundImage: `url(${imageUrl})`,
           backgroundSize: "cover",
           backgroundPosition: "center",
           backgroundRepeat: "no-repeat",
-          transform: image_side === "left" ? "rotate(-5deg)" : "rotate(5deg)", // Conditional rotation
         }}
       ></div>
 
-      {/* Second Column: Paragraph */}
+      {/* Second Column: Paragraph with Hover Effect */}
       <div className="flex-[2] flex items-center">
-        <p className="text-2xl text-gray-700 leading-relaxed text-justify">
+        <p className="text-2xl text-gray-600 leading-relaxed text-justify transition-all duration-500 ease-linear hover:text-green-900 hover:font-semibold">
           {paragraphText}
         </p>
       </div>
@@ -36,5 +39,10 @@ const AboutComponent: React.FC<AboutComponentProps> = ({ imageUrl, paragraphText
 };
 
 export default AboutComponent;
+
+
+
+
+
 
 
