@@ -41,9 +41,9 @@ const Package: React.FC<PackageProps> = ({
       </div>
 
       {/* Image */}
-      <div className="pr-4 pl-4">
+      <div className="pr-0 pl-0">
         <div
-          className="h-48 w-full bg-cover bg-center rounded-xl"
+          className="h-48 w-full bg-cover bg-center "
           style={{
             backgroundImage: `url(${imageUrl})`,
             backgroundSize: 'cover',
