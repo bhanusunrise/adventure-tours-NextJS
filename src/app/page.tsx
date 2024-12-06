@@ -184,7 +184,7 @@ export default function Home() {
       <div className="bg-white mt-72 md:pl-36 md:pr-36 mb-72 sm:pl-8 sm:pr-8">
         <Heading text="Reach out us" color="text-gray-600" />
         <div className="m-20"></div>
-        <div className="grid grid-cols-1 sm:grid-cols-4 gap-10">
+        <div className="grid grid-cols-1 sm:grid-cols-5 gap-10">
 
           <div className="col col-span-3">
             <div className="m-10"></div>
@@ -199,7 +199,7 @@ export default function Home() {
               <div className="m-10"></div>
           </div>
 
-          <div className="col bg-yellow-300 rounded-2xl pl-4 pr-4 shadow-2xl">
+          <div className="col col-span-2 bg-yellow-300 rounded-2xl pl-4 pr-4 shadow-2xl">
 
             <div className="m-10"></div>
             <div className="text-center">
