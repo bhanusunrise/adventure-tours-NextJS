@@ -6,7 +6,7 @@ import { FaMapMarkerAlt, FaUmbrellaBeach } from 'react-icons/fa'; // Location an
 interface PackageProps {
   packageName: string;
   price: number;
-  priceLimit: 'onwards' | 'up to' | 'equal';
+  priceLimit: string;
   imageUrl: string;
   description: string;
   locations: string[]; // Locations as an array
