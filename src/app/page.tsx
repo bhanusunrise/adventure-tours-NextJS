@@ -4,6 +4,7 @@ import Description from "./components/description";
 import Destination from "./components/destination"; // Import Destination Component
 import Heading from "./components/heading";
 import NavBar from "./components/navbar";
+import Package from "./components/package";
 import SubHeading from "./components/sub_heading";
 
 export default function Home() {
@@ -34,6 +35,69 @@ export default function Home() {
     { imageUrl: "./uploads/up_1007.jpg", name: "Historical Sites" },
     { imageUrl: "./uploads/up_1008.jpg", name: "Hidden Waterfalls" },
   ];
+
+  const packages = [
+  {
+    packageName: "Tropical Paradise Getaway",
+    price: 20000,
+    priceLimit: "onwards",
+    imageUrl: "./uploads/up_1000.jpg",
+    description:
+      "Enjoy a relaxing trip to the tropical islands with our exclusive getaway package. Includes meals and accommodation.",
+    location: ['Colombo', 'Galle', 'Kandy', 'Jaffna'],
+    activities: ['Snorkeling', 'Surfing', 'Beach Volleyball', 'Sunbathing']
+  },
+  {
+    packageName: "Mountain Adventure Trek",
+    price: 15000,
+    priceLimit: "up to",
+    imageUrl: "./uploads/up_1001.jpg",
+    description:
+      "Explore the breathtaking mountain trails with our guided trekking packages. Perfect for adventure enthusiasts!",
+    location: ['Colombo', 'Galle', 'Kandy', 'Jaffna'],
+    activities: ['Snorkeling', 'Surfing', 'Beach Volleyball', 'Sunbathing']
+  },
+  {
+    packageName: "City Tour Deluxe",
+    price: 5000,
+    priceLimit: "equal",
+    imageUrl: "./uploads/up_1002.jpg",
+    description:
+      "Discover the city's iconic landmarks and hidden gems with our deluxe city tour package.",
+    location: ['Colombo', 'Galle', 'Kandy', 'Jaffna'],
+    activities: ['Snorkeling', 'Surfing', 'Beach Volleyball', 'Sunbathing']
+  },
+  {
+    packageName: "Desert Safari Adventure",
+    price: 10000,
+    priceLimit: "onwards",
+    imageUrl: "./uploads/up_1003.jpg",
+    description:
+      "Embark on an unforgettable journey through the dunes with our exciting desert safari packages.",
+    location: ['Colombo', 'Galle', 'Kandy', 'Jaffna'],
+    activities: ['Snorkeling', 'Surfing', 'Beach Volleyball', 'Sunbathing']
+  },
+  {
+    packageName: "Historical Exploration",
+    price: 8000,
+    priceLimit: "up to",
+    imageUrl: "./uploads/up_1004.jpg",
+    description:
+      "Dive into the rich history and culture of ancient landmarks with our guided historical exploration tours.",
+    location: ['Colombo', 'Galle', 'Kandy', 'Jaffna'],
+    activities: ['Snorkeling', 'Surfing', 'Beach Volleyball', 'Sunbathing']
+  },
+  {
+    packageName: "Beachside Relaxation",
+    price: 12000,
+    priceLimit: "onwards",
+    imageUrl: "./uploads/up_1005.jpg",
+    description:
+      "Relax by the serene beaches with our beachside vacation packages. Perfect for unwinding and enjoying nature.",
+    location: ['Colombo', 'Galle', 'Kandy', 'Jaffna'],
+    activities: ['Snorkeling', 'Surfing', 'Beach Volleyball', 'Sunbathing']
+  },
+];
 
   return (
     <>
@@ -88,6 +152,30 @@ export default function Home() {
             <Destination key={index} imageUrl={destination.imageUrl} name={destination.name} />
           ))}
         </div>
+
+        <div className="m-40"></div>
+        <SubHeading text="Packages" color="text-gray-600" />
+        <div className="m-10"></div>
+        <Description
+          text="With our reliable Tuk Tuk services, years of driving expertise, and a passion for sharing the local culture, we’ll ensure your adventure is both safe and exciting."
+          color="text-gray-600"
+        />
+        <div className="m-10"></div>
+        {/* Packages Grid */}
+<div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+  {packages.map((pkg, index) => (
+    <Package
+      key={index}
+      packageName={pkg.packageName}
+      price={pkg.price}
+      priceLimit={pkg.priceLimit}
+      imageUrl={pkg.imageUrl}
+      description={pkg.description}
+      locations={pkg.location}
+      activities={pkg.activities}
+    />
+  ))}
+</div>
       </div>
     </>
   );

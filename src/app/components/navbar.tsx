@@ -30,7 +30,7 @@ export default function NavBar() {
             <div className="flex shrink-0 items-center">
               <img
                 alt="Your Company"
-                src="./favicon.ico"
+                src="./logo.png"
                 className="h-28 w-auto"
               />
             </div>

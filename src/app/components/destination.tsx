@@ -10,7 +10,7 @@ interface DestinationProps {
 const Destination: React.FC<DestinationProps> = ({ imageUrl, name }) => {
   return (
     <div
-      className="relative w-full h-64 rounded-lg overflow-hidden shadow-2xl group"
+      className="relative w-full h-64 rounded-xl overflow-hidden shadow-2xl group"
       style={{
         backgroundImage: `url(${imageUrl})`,
         backgroundSize: 'cover',
