@@ -69,7 +69,7 @@ export default function Home() {
         ))}
       </div>
 
-      <div className="m-96 p-48"></div>
+      <div className="m-24"></div>
 
       {/* Take a Ride Section */}
       <div className="bg-green-300 mt-72 md:pl-36 md:pr-36 mb-72 sm:pl-8 sm:pr-8 pt-36 pb-36">
