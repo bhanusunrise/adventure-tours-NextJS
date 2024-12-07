@@ -1,5 +1,3 @@
-'use client';
-
 import React from 'react';
 import { FaPhone, FaEnvelope, FaMapMarkerAlt } from 'react-icons/fa'; // Icons for contact types
 

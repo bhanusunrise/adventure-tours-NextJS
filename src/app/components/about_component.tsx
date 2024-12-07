@@ -1,5 +1,3 @@
-'use client'
-
 import React from "react";
 import './AboutComponent.css';  // Import the CSS file
 
