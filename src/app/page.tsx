@@ -210,7 +210,7 @@ export default function Home() {
             <div className="m-1"></div>
             <ContactSection contactType="phone" description="+94762278270" />
             <div className="m-1"></div>
-            <ContactSection contactType="address" description="No. 12, Galle Road, Colombo 7" />
+            <ContactSection contactType="address" description="18 St Andrew's Rd, Nuwara Eliya. 22200" />
             <div className="m-1"></div>
             <ContactSection contactType="email" description="aasanth673@gmail.com" />
             <div className="m-10"></div>
