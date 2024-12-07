@@ -19,6 +19,17 @@
   background-position: center; /* Centers the background image */
 }
 
+@media (max-width: 640px) {
+  /* For small devices */
+  .bg-home-bg {
+    background: linear-gradient(180deg, rgb(0, 0, 0) 0%, rgba(0, 0, 0, 0.5) 80%),
+      url("/home_bg_mobile.jpg"); /* Mobile-specific image */
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+  }
+}
+
 .image-container {
   transition: transform 0.5s ease-in-out;
 }

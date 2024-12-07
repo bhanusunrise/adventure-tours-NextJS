@@ -26,7 +26,7 @@ export default function NavBar() {
       }))
     );
 
-    const targetElement = document.getElementById(href.slice(1)); // Remove '#' to match the ID
+    const targetElement = document.getElementById(href.slice(1));
     if (targetElement) {
       targetElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
     }
@@ -34,9 +34,9 @@ export default function NavBar() {
 
   useEffect(() => {
     const observerOptions = {
-      root: null, // Viewport as root
+      root: null,
       rootMargin: '0px',
-      threshold: 0.1, // Trigger when 10% of the section is visible
+      threshold: 0.1,
     };
 
     const observerCallback = (entries: IntersectionObserverEntry[]) => {
@@ -56,7 +56,7 @@ export default function NavBar() {
     const observer = new IntersectionObserver(observerCallback, observerOptions);
 
     navigation.forEach((item) => {
-      const sectionElement = document.getElementById(item.href.slice(1)); // Remove '#' for the ID
+      const sectionElement = document.getElementById(item.href.slice(1));
       if (sectionElement) observer.observe(sectionElement);
     });
 
@@ -73,9 +73,9 @@ export default function NavBar() {
           ['Who are we?', 'Take a Ride', 'Reach Out Us'].includes(item.name) && item.current
       )
     ) {
-      return 'bg-gray-800/90'; // Semi-transparent
+      return 'bg-gray-800/90';
     }
-    return 'bg-gray-900'; // Fully opaque
+    return 'bg-gray-900';
   };
 
   return (
@@ -83,45 +83,38 @@ export default function NavBar() {
       as="nav"
       className={classNames('navbar-custom', getNavbarBgClass(), 'text-gray-200 hover:bg-gray-900')}
     >
-      <div className="mx-auto px-20 sm:px-20 lg:px-20 pt-5 pb-5">
-        <div className="relative flex h-28 items-center justify-between">
-          <div className="absolute inset-y-0 left-0 flex items-center sm:hidden">
-            <DisclosureButton className="group relative inline-flex items-center justify-center rounded-md p-2 text-gray-600 hover:bg-gray-700 hover:text-white focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white">
-              <span className="absolute -inset-0.5" />
+      <div className="mx-auto px-20 sm:px-20 lg:px-20 pt-1 pb-1">
+        <div className="relative flex h-20 items-center justify-between">
+          <div className="flex items-center">
+            <img alt="Your Company" src="./logo.png" className="h-14 w-auto" />
+          </div>
+          <div className="flex items-center sm:hidden">
+            <DisclosureButton className="relative inline-flex items-center justify-center rounded-md p-2 text-gray-600 hover:bg-gray-700 hover:text-white focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white">
               <span className="sr-only">Open main menu</span>
-              <Bars3Icon aria-hidden="true" className="block size-6 group-data-[open]:hidden" />
-              <XMarkIcon aria-hidden="true" className="hidden size-6 group-data-[open]:block" />
+              <Bars3Icon className="block h-6 w-6 group-data-[open]:hidden" aria-hidden="true" />
+              <XMarkIcon className="hidden h-6 w-6 group-data-[open]:block" aria-hidden="true" />
             </DisclosureButton>
           </div>
-          <div className="flex flex-1 items-center justify-center sm:items-stretch sm:justify-start">
-            <div className="flex shrink-0 items-center">
-              <img alt="Your Company" src="./logo.png" className="h-28 w-auto" />
-            </div>
-          </div>
-          <div className="absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0">
-            <div className="hidden sm:ml-4 sm:block">
-              <div className="flex space-x-4">
-                {navigation.map((item, index) => (
-                  <a
-                    key={item.name}
-                    href={item.href}
-                    onClick={(e) => {
-                      e.preventDefault();
-                      handleNavigationClick(index, item.href);
-                    }}
-                    aria-current={item.current ? 'page' : undefined}
-                    className={classNames(
-                      item.current
-                        ? 'bg-gray-400 text-white'
-                        : 'text-gray-100 hover:bg-gray-800 hover:text-white',
-                      'rounded-md px-3 py-2 text-lg font-medium'
-                    )}
-                  >
-                    {item.name}
-                  </a>
-                ))}
-              </div>
-            </div>
+          <div className="hidden sm:flex sm:items-center sm:space-x-4">
+            {navigation.map((item, index) => (
+              <a
+                key={item.name}
+                href={item.href}
+                onClick={(e) => {
+                  e.preventDefault();
+                  handleNavigationClick(index, item.href);
+                }}
+                aria-current={item.current ? 'page' : undefined}
+                className={classNames(
+                  item.current
+                    ? 'bg-gray-400 text-white'
+                    : 'text-gray-100 hover:bg-gray-800 hover:text-white',
+                  'rounded-md px-3 py-2 text-lg font-medium'
+                )}
+              >
+                {item.name}
+              </a>
+            ))}
           </div>
         </div>
       </div>

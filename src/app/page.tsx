@@ -115,15 +115,27 @@ export default function Home() {
       </div>
 
       {/* Hero Section */}
-      <div className="h-screen bg-home-bg" id="home">
-        <div className="h-full flex flex-col items-center justify-center text-7xl text-white text-center font-semibold">
-          <div>
-            Capture Your <span style={{ color: "yellow" }}>Memories</span>
-          </div>
-          <div>with Adventures</div>
-          <Button text="Call Now" color="red" className="mt-10 px-10 py-2 text-white text-2xl" onClick={handleCallNowClick} />
-        </div>
-      </div>
+<div className="h-screen bg-home-bg" id="home">
+  <div className="h-full sm:h-1/2 md:h-full flex flex-col items-center justify-center text-center font-semibold text-white">
+    {/* Logo for small devices */}
+    <img
+      src="/logo.png"
+      alt="Logo"
+      className="sm:hidden h-40 w-auto mb-8"
+    />
+    
+    <div className="text-4xl sm:text-5xl md:text-7xl">
+      Capture Your <span style={{ color: "yellow" }}>Memories</span>
+    </div>
+    <div className="text-4xl sm:text-6xl md:text-7xl">with Adventures</div>
+    <Button
+      text="Call Now"
+      color="red"
+      className="mt-10 px-10 py-2 text-2xl sm:text-xl md:text-2xl"
+      onClick={handleCallNowClick}
+    />
+  </div>
+</div>
 
       <div className="h-40"></div>
 
