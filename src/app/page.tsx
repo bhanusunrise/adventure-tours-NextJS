@@ -149,7 +149,7 @@ export default function Home() {
       <div className="h-40"></div>
 
       {/* Take a Ride Section */}
-      <div className="bg-red-200 mt-72 mb-72 md:pl-36 md:pr-36 sm:pl-8 sm:pr-8 pt-36 pb-36" id="ride">
+      <div className="bg-gray-100 mt-72 mb-72 md:pl-36 md:pr-36 sm:pl-8 sm:pr-8 pt-36 pb-36" id="ride">
         <Heading text="Wanna go a ride?" color="text-gray-600" />
         <div className="h-40"></div>
         <SubHeading text="Destinations" color="text-gray-600" />
