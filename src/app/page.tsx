@@ -108,7 +108,7 @@ export default function Home() {
       </div>
 
       {/* Hero Section */}
-      <div className="h-screen bg-home-bg">
+      <div className="h-screen bg-home-bg" id="home">
         <div className="h-full flex flex-col items-center justify-center text-7xl text-white text-center font-semibold">
           <div>
             Capture Your <span style={{ color: "yellow" }}>Memories</span>
@@ -118,8 +118,12 @@ export default function Home() {
         </div>
       </div>
 
+      <div className="h-40"></div>
+
       {/* Who are we Section */}
-      <div className="bg-white mt-72 md:pl-36 md:pr-36 mb-72 sm:pl-8 sm:pr-8">
+      <div className="bg-white mt-72 mb-72 md:pl-36 md:pr-36 sm:pl-8 sm:pr-8" id="about">
+        <div className="h-40"></div>
+        
         <Heading text="Who are we?" color="text-gray-600" />
 
         <div className="m-28"></div>
@@ -135,12 +139,12 @@ export default function Home() {
         ))}
       </div>
 
-      <div className="m-24"></div>
+      <div className="h-40"></div>
 
       {/* Take a Ride Section */}
-      <div className="bg-green-300 mt-72 md:pl-36 md:pr-36 mb-72 sm:pl-8 sm:pr-8 pt-36 pb-36">
+      <div className="bg-green-300 mt-72 mb-72 md:pl-36 md:pr-36 sm:pl-8 sm:pr-8 pt-36 pb-36" id="ride">
         <Heading text="Wanna go a ride?" color="text-gray-600" />
-        <div className="m-40"></div>
+        <div className="h-40"></div>
         <SubHeading text="Destinations" color="text-gray-600" />
         <div className="m-10"></div>
         <Description
@@ -164,24 +168,28 @@ export default function Home() {
         />
         <div className="m-10"></div>
         {/* Packages Grid */}
-<div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-  {packages.map((pkg, index) => (
-    <Package
-      key={index}
-      packageName={pkg.packageName}
-      price={pkg.price}
-      priceLimit={pkg.priceLimit}
-      imageUrl={pkg.imageUrl}
-      description={pkg.description}
-      locations={pkg.location}
-      activities={pkg.activities}
-    />
-  ))}
-</div>
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+           {packages.map((pkg, index) => (
+                <Package
+                 key={index}
+                  packageName={pkg.packageName}
+                  price={pkg.price}
+                  priceLimit={pkg.priceLimit}
+                  imageUrl={pkg.imageUrl}
+                  description={pkg.description}
+                  locations={pkg.location}
+                  activities={pkg.activities}
+                />
+              ))}
+            </div>
       </div>
 
+
+
+      <div className="h-40"></div>
       {/* Contact Us Section */}
-      <div className="bg-white mt-72 md:pl-36 md:pr-36 mb-72 sm:pl-8 sm:pr-8">
+      <div className="bg-white mt-72 md:pl-36 md:pr-36 mb-72 sm:pl-8 sm:pr-8" id="contact">
+        <div className="h-40"></div>
         <Heading text="Reach out us" color="text-gray-600" />
         <div className="m-20"></div>
         <div className="grid grid-cols-1 sm:grid-cols-5 gap-10">
