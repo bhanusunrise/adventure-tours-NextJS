@@ -1,3 +1,5 @@
+'use client'
+
 import AboutComponent from "./components/about_component";
 import Button from "./components/button";
 import ContactSection from "./components/contact";
@@ -101,6 +103,11 @@ export default function Home() {
   },
 ];
 
+  function handleCallNowClick(): void {
+  window.location.href = "tel:+94762278270";
+}
+
+
   return (
     <>
       <div style={{ position: "relative" }}>
@@ -114,7 +121,7 @@ export default function Home() {
             Capture Your <span style={{ color: "yellow" }}>Memories</span>
           </div>
           <div>with Adventures</div>
-          <Button text="Call Now" color="red" className="mt-10 px-10 py-2 text-white text-2xl" />
+          <Button text="Call Now" color="red" className="mt-10 px-10 py-2 text-white text-2xl" onClick={handleCallNowClick} />
         </div>
       </div>
 
