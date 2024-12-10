@@ -1,17 +1,29 @@
-.image-container {
+/* AboutComponent.css */
+
+/* Default styles for larger screens */
+.image {
+  width: 100%; /* Full width of the container */
+  height: 100%; /* Full height of the container */
+  object-fit: cover; /* Crops the image to cover the container */
   transform: rotate(5deg);
   transition: transform 0.5s ease-in-out;
 }
 
-.image-container-left {
+.image-left {
   transform: rotate(-5deg);
-  transition: transform 0.5s ease-in-out;
 }
 
-.image-container:hover {
-  transform: rotate(0deg);
+.image:hover,
+.image-left:hover {
+  transform: rotate(0deg); /* Remove rotation on hover */
 }
 
-.image-container-left:hover {
-  transform: rotate(0deg);
+/* For mobile devices */
+@media (max-width: 768px) {
+  .image,
+  .image-left {
+    transform: none; /* Disable rotation */
+    transition: none; /* Remove animation */
+    object-fit: contain; /* Display the entire image */
+  }
 }

@@ -24,7 +24,7 @@ export default function Home() {
   ];
 
   const paragraphTexts = [
-    "We are a team of passionate individuals committed to delivering excellence. Our mission is to create innovative solutions and provide outstanding service to our clients. Join us in our journey!",
+    "We are a team of passionate individuals committed to delivering excellence. Our mission is to create innovative solutions and provide outstanding service to our clients. Join us in our journey! ",
     "Our expertise spans across various industries, and we pride ourselves on our adaptability. We work closely with clients to ensure their needs are met with precision and care.",
     "Innovation and creativity are at the core of what we do. Our team constantly pushes the boundaries to deliver unique and impactful solutions for every project we undertake.",
   ];
@@ -137,15 +137,15 @@ export default function Home() {
   </div>
 </div>
 
-      <div className="h-40"></div>
+      <div className="md:h-40 sm:h-10"></div>
 
       {/* Who are we Section */}
-      <div className="bg-white mt-72 mb-72 md:pl-36 md:pr-36 sm:pl-8 sm:pr-8" id="about">
+      <div className="bg-white md:mt-72 md:mb-72 md:pl-36 md:pr-36 sm:pl-8 sm:pr-8 sm:mt-10 sm:mb-10" id="about">
         <div className="h-40"></div>
         
         <Heading text="Who are we?" color="text-gray-600" />
 
-        <div className="m-28"></div>
+        <div className="md:h-28 h-20"></div>
 
         {/* Map through the arrays and pass data to AboutComponent */}
         {imageUrls.map((imageUrl, index) => (
@@ -158,7 +158,7 @@ export default function Home() {
         ))}
       </div>
 
-      <div className="h-40"></div>
+      <div className="md:h-40 sm:h-10"></div>
 
       {/* Take a Ride Section */}
       <div className="bg-gray-100 mt-72 mb-72 md:pl-36 md:pr-36 sm:pl-8 sm:pr-8 pt-36 pb-36" id="ride">
