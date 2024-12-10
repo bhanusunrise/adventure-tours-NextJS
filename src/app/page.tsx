@@ -161,7 +161,7 @@ export default function Home() {
       <div className="md:h-40 sm:h-10"></div>
 
       {/* Take a Ride Section */}
-      <div className="bg-gray-100 mt-72 mb-72 md:pl-36 md:pr-36 pl-8 pr-8 pt-36 pb-36" id="ride">
+      <div className="bg-gray-100 md:mt-72 md:mb-72 mt-20 mb-20 md:pl-36 md:pr-36 pl-8 pr-8 pt-36 pb-36" id="ride">
         <Heading text="Wanna go a ride?" color="text-gray-600" />
         <div className="h-40"></div>
         <SubHeading text="Destinations" color="text-gray-600" />
@@ -205,13 +205,13 @@ export default function Home() {
 
 
 
-      <div className="h-40"></div>
+      <div className="md:h-40 h-0"></div>
       {/* Contact Us Section */}
-      <div className="bg-white mt-72 md:pl-36 md:pr-36 mb-72 sm:pl-8 sm:pr-8" id="contact">
+      <div className="bg-white md:mt-72 md:pl-36 md:pr-36 md:mb-72 sm:pl-8 sm:pr-8" id="contact">
         <div className="h-40"></div>
         <Heading text="Reach out us" color="text-gray-600" />
         <div className="m-20"></div>
-        <div className="grid grid-cols-1 sm:grid-cols-5 gap-10">
+        <div className="grid grid-cols-1 sm:grid-cols-5 md:gap-10 sm:gap-0">
 
           <div className="col col-span-3">
             <div className="m-10"></div>
@@ -223,25 +223,31 @@ export default function Home() {
   referrerPolicy="no-referrer-when-downgrade"
 ></iframe>
 
-              <div className="m-10"></div>
+              <div className="m-48"></div>
           </div>
+          <div
+  className="col col-span-2 bg-yellow-300 rounded-2xl pl-4 pr-4 shadow-2xl md:mx-auto mt-20 mx-4"
+  id="contact-us-section"
+>
+  <div className="m-10"></div>
+  <div className="text-center">
+    <SubHeading text="Contacts" color="text-gray-600" />
+  </div>
+  <div className="m-10"></div>
+  <ContactSection contactType="phone" description="+94776328270" />
+  <div className="m-1"></div>
+  <ContactSection contactType="phone" description="+94762278270" />
+  <div className="m-1"></div>
+  <ContactSection
+    contactType="address"
+    description="18, St Andrew's Rd, Nuwara Eliya. 22200"
+  />
+  <div className="m-1"></div>
+  <ContactSection contactType="email" description="aasanth673@gmail.com" />
+  <div className="m-10"></div>
+</div>
 
-          <div className="col col-span-2 bg-yellow-300 rounded-2xl pl-4 pr-4 shadow-2xl">
 
-            <div className="m-10"></div>
-            <div className="text-center">
-              <SubHeading text="Contacts" color="text-gray-600" />
-            </div>            
-            <div className="m-10"></div>
-            <ContactSection contactType="phone" description="+94776328270" />
-            <div className="m-1"></div>
-            <ContactSection contactType="phone" description="+94762278270" />
-            <div className="m-1"></div>
-            <ContactSection contactType="address" description="18, St Andrew's Rd, Nuwara Eliya. 22200" />
-            <div className="m-1"></div>
-            <ContactSection contactType="email" description="aasanth673@gmail.com" />
-            <div className="m-10"></div>
-          </div>
 
         </div>
         <div className="m-28"></div>
