@@ -2,7 +2,7 @@ import Textarea from "@/app/components/form/textarea";
 import Input from "@/app/components/form/input";
 import Button from "@/app/components/form/button";
 import Label from "@/app/components/form/label";
-import { Table, TableCaption, TableHead, TableHeader, TableRow } from "@/app/components/table";
+import { Table, TableHead, TableRow } from "@/app/components/table";
 
 const AboutPage = () => {
   return (
