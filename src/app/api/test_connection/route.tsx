@@ -11,9 +11,12 @@ export async function GET() {
         });
     } catch (error) {
         console.error("Connection Error:", error);
-        return new Response(`Database connection failed: ${error.message}`, {
-            status: 500,
-        });
+        return new Response(
+            `Database connection failed: ${(error as Error).message}`,
+            {
+                status: 500,
+            }
+        );
     } finally {
         if (connection) {
             await connection.end(); // Close the connection to prevent leaks
