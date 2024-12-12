@@ -6,14 +6,24 @@ type ButtonProps = {
   text: string;
   onClick?: () => void;
   className?: string;
+  bgColor: string; // Make bgColor required
+  hoverColor: string; // Make hoverColor required
+  focusColor: string; // Make focusColor required
 };
 
-const Button: React.FC<ButtonProps> = ({ text, onClick, className = "" }) => {
+const Button: React.FC<ButtonProps> = ({
+  text,
+  onClick,
+  className = "",
+  bgColor,
+  hoverColor,
+  focusColor,
+}) => {
   return (
     <button
       type="button"
       onClick={onClick}
-      className={`text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800 ${className}`}
+      className={`${bgColor} ${hoverColor} focus:ring-4 ${focusColor} text-white font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 ${className}`}
     >
       {text}
     </button>
