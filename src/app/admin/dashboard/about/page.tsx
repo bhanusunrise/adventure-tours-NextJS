@@ -33,6 +33,7 @@ const AboutPage = () => {
                 type="file"
                 required
                 className="mt-1"
+                accept="image/*"
               />
             </div>
 
