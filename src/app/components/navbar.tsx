@@ -83,7 +83,7 @@ export default function NavBar() {
       as="nav"
       className={classNames('navbar-custom', getNavbarBgClass(), 'text-gray-200 hover:bg-gray-900')}
     >
-      <div className="mx-auto px-20 sm:px-20 lg:px-20 pt-1 pb-1">
+      <div className="mx-auto px-20 sm:px-4 lg:px-20 pt-1 pb-1">
         <div className="relative flex h-20 items-center justify-between">
           <div className="flex items-center">
             <img alt="Your Company" src="./logo.png" className="h-14 w-auto" />
