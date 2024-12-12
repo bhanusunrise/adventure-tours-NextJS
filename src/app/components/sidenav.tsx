@@ -11,6 +11,14 @@ const SideNav = () => {
         </li>
         <li>
           <Link
+            href="/admin/dashboard/messages"
+            className="flex items-center justify-center p-4 hover:bg-gray-700 rounded"
+          >
+            Messages
+          </Link>
+        </li>
+        <li>
+          <Link
             href="/admin/dashboard/about"
             className="flex items-center justify-center p-4 hover:bg-gray-700 rounded"
           >
