@@ -1,6 +1,7 @@
 import Input from "@/app/components/form/input";
 import Button from "@/app/components/form/button";
 import Label from "@/app/components/form/label";
+import { Table, TableHead, TableRow } from "@/app/components/table";
 
 const DestinationsPage = () => {
   return (
@@ -56,7 +57,17 @@ const DestinationsPage = () => {
         {/* Right Section (3/4) */}
 
         <div className="w-full md:w-3/4 bg-gray-100 p-6 rounded-lg shadow-md dark:bg-gray-800">
-
+          <p className="text-xl text-gray-100">Destinations</p>
+          <Table>
+            <TableRow className="text-gray-100 font-bold">
+             <TableHead>#</TableHead>
+             <TableHead>ID</TableHead>
+             <TableHead>Image</TableHead>
+             <TableHead>Destination</TableHead>
+             <TableHead>Order</TableHead>
+             <TableHead>Action</TableHead>
+            </TableRow>
+          </Table>
         </div>
         
       </div>

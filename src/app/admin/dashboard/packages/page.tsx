@@ -2,6 +2,7 @@ import Input from "@/app/components/form/input";
 import Button from "@/app/components/form/button";
 import Label from "@/app/components/form/label";
 import Textarea from "@/app/components/form/textarea";
+import { Table, TableRow, TableHead } from "@/app/components/table";
 
 const PackagesPage = () => {
   return (
@@ -102,11 +103,21 @@ const PackagesPage = () => {
 
         {/* Right Section (3/4) */}
         <div className="w-full md:w-3/4 bg-gray-100 p-6 rounded-lg shadow-md dark:bg-gray-800">
-          <p className="text-lg text-gray-700 dark:text-gray-100">Package List</p>
-          {/* Placeholder for future content (e.g., list of packages) */}
-          <div className="mt-4 text-gray-500 dark:text-gray-400">
-            No packages added yet.
-          </div>
+          <p className="text-xl text-gray-100">Packages</p>
+          <Table>
+            <TableRow className="text-gray-100 font-bold">
+             <TableHead>#</TableHead>
+             <TableHead>ID</TableHead>
+             <TableHead>Name</TableHead>
+             <TableHead>Price</TableHead>
+             <TableHead>Image</TableHead>
+             <TableHead>Description</TableHead>
+             <TableHead>Locations</TableHead>
+             <TableHead>Activities</TableHead>
+             <TableHead>Order</TableHead>
+             <TableHead>Action</TableHead>
+            </TableRow>
+          </Table>
         </div>
       </div>
     </div>

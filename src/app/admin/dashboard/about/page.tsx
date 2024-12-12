@@ -2,6 +2,7 @@ import Textarea from "@/app/components/form/textarea";
 import Input from "@/app/components/form/input";
 import Button from "@/app/components/form/button";
 import Label from "@/app/components/form/label";
+import { Table, TableCaption, TableHead, TableHeader, TableRow } from "@/app/components/table";
 
 const AboutPage = () => {
   return (
@@ -58,7 +59,17 @@ const AboutPage = () => {
         {/* Right Section (3/4) */}
 
         <div className="w-full md:w-3/4 bg-gray-100 p-6 rounded-lg shadow-md dark:bg-gray-800">
-
+        <p className="text-xl text-gray-100">About Descriptions</p>
+          <Table>
+            <TableRow className="text-gray-100 font-bold">
+             <TableHead>#</TableHead>
+             <TableHead>ID</TableHead>
+             <TableHead>Image</TableHead>
+             <TableHead>Description</TableHead>
+             <TableHead>Order</TableHead>
+             <TableHead>Action</TableHead>
+            </TableRow>
+          </Table>
         </div>
         
       </div>
