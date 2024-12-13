@@ -1,6 +1,7 @@
-'use client'
+'use client';
 
 import React, { useState } from 'react';
+import { useRouter } from 'next/navigation'; // Import useRouter
 import Input from '../components/form/input';
 import Label from '../components/form/label';
 import Button from '../components/form/button';
@@ -10,6 +11,9 @@ const LoginPage: React.FC = () => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
+
+  // Initialize the router
+  const router = useRouter();
 
   // Handle the login process
   const handleLogin = async (e: React.FormEvent) => {
@@ -39,8 +43,8 @@ const LoginPage: React.FC = () => {
       if (response.ok) {
         // User validated successfully
         console.log('User validated:', data.message);
-        // Redirect to another page or show success
-        // Example: window.location.href = '/dashboard';
+        // Redirect to admin dashboard
+        router.push('/admin/dashboard');
       } else {
         // Handle validation failure
         setErrorMessage(data.error || 'An error occurred');
@@ -91,12 +95,12 @@ const LoginPage: React.FC = () => {
           )}
           <div className="flex gap-1">
             <Button
-  text="Login"
-  type="submit" // This makes the button trigger the form's onSubmit
-  bgColor="bg-blue-600"
-  hoverColor="hover:bg-blue-700"
-  focusColor="focus:ring-blue-300"
-/>
+              text="Login"
+              type="submit" // This makes the button trigger the form's onSubmit
+              bgColor="bg-blue-600"
+              hoverColor="hover:bg-blue-700"
+              focusColor="focus:ring-blue-300"
+            />
             <Button
               text="Reset"
               onClick={handleReset}
@@ -112,6 +116,7 @@ const LoginPage: React.FC = () => {
 };
 
 export default LoginPage;
+
 
 
 
