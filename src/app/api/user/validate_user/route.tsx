@@ -1,7 +1,6 @@
 // app/api/auth/validate_user/route.tsx
 import { NextRequest } from 'next/server';
 import { dbConnect } from '@/app/lib/db';
-import { createHash } from 'crypto';
 
 async function getEncryptedPassword(password: string): Promise<string> {
   const response = await fetch('http://localhost:3000/api/helpers/get_encrypted_password', {
