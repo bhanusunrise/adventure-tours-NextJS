@@ -1,6 +1,6 @@
-// app/api/auth/validate_user/route.tsx
 import { NextRequest } from 'next/server';
 import { dbConnect } from '@/app/lib/db';
+import { RowDataPacket } from 'mysql2'; // Import RowDataPacket for typing
 
 async function getEncryptedPassword(password: string): Promise<string> {
   const response = await fetch('http://localhost:3000/api/helpers/get_encrypted_password', {
@@ -36,12 +36,12 @@ export async function POST(req: NextRequest) {
     const connection = await dbConnect(); // Connect to the database
 
     // Step 1: Check if the user exists
-    const [user] = await connection.query(
+    const [rows] = await connection.query<RowDataPacket[]>(
       'SELECT * FROM user WHERE name = ?',
       [username]
     );
 
-    if (!user || user.length === 0) {
+    if (!rows || rows.length === 0) {
       return new Response(
         JSON.stringify({ error: 'User not found' }),
         {
@@ -51,8 +51,8 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    // The query result may return an array with user objects
-    const userRecord = user[0]; // Get the first user object from the result
+    // The query result returns an array with user objects
+    const userRecord = rows[0]; // Get the first user object from the result
 
     // Step 2: Get the encrypted password using the external API
     const encryptedPassword = await getEncryptedPassword(password);
