@@ -1,0 +1,65 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id                Int      @id @default(autoincrement())
+  name              String
+  email             String   @unique
+  token             String   @unique
+  password          String
+  token_expire_date DateTime
+}
+
+model About {
+  id          String @id
+  index       Int
+  description String
+  image_link  String
+}
+
+model Destinations {
+  id         String @id
+  name       String
+  image_link String
+  index      Int
+}
+
+model Packages {
+  id          String                 @id
+  name        String
+  price       String
+  index       Int
+  image_link  String
+  description String
+
+  // Relations
+  activities  Package_Activities[]   @relation("PackageActivities")
+  locations   Package_Locations[]    @relation("PackageLocations")
+}
+
+model Package_Locations {
+  id          String   @id
+  package_id  String
+  name        String
+
+  // Relation to Packages
+  package     Packages @relation(fields: [package_id], references: [id], name: "PackageLocations")
+}
+
+model Package_Activities {
+  id          String   @id
+  package_id  String
+  name        String
+
+  // Relation to Packages
+  package     Packages @relation(fields: [package_id], references: [id], name: "PackageActivities")
+}
