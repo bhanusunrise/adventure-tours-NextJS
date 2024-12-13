@@ -2,6 +2,7 @@ import { NextRequest } from 'next/server';
 import { dbConnect } from '@/app/lib/db';
 import { TOKEN_EXPIRE_TIME } from '@/app/lib/constants';
 import { createHash } from 'crypto';
+import { RowDataPacket } from 'mysql2'; // Import RowDataPacket to type the query result
 
 async function generateToken(): Promise<string> {
   // Generate a random number between 10000 and 99999
@@ -49,12 +50,12 @@ export async function POST(req: NextRequest) {
     const connection = await dbConnect(); // Connect to the database
 
     // Step 1: Check if the user exists
-    const [user] = await connection.query(
+    const [rows] = await connection.query<RowDataPacket[]>(
       'SELECT * FROM user WHERE name = ?',
       [username]
     );
 
-    if (!user || user.length === 0) {
+    if (!rows || rows.length === 0) {
       return new Response(
         JSON.stringify({ error: 'User not found' }),
         {
@@ -64,16 +65,16 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    console.log('User:', user);
+    console.log('User:', rows);
 
-    // The query result may return an array with user objects
-    const userRecord = user[0]; // Get the first user object from the result
+    // The query result returns an array with user objects
+    const userRecord = rows[0]; // Get the first user object from the result
 
     // Step 2: Get the encrypted password using the external API
     const encryptedPassword = await getEncryptedPassword(password);
 
-    console.log("Encrypted Password : " + encryptedPassword);
-    console.log("Database Password : " + userRecord.password);
+    console.log("Encrypted Password: " + encryptedPassword);
+    console.log("Database Password: " + userRecord.password);
 
     // Step 3: Verify the password
     if (userRecord.password !== encryptedPassword) {
