@@ -1,9 +1,10 @@
 import { NextRequest } from 'next/server';
 import { dbConnect } from '@/app/lib/db';
 import { RowDataPacket } from 'mysql2'; // Import RowDataPacket for typing
+import { BASE_URL } from '@/app/lib/constants';
 
 async function getEncryptedPassword(password: string): Promise<string> {
-  const response = await fetch('http://localhost:3000/api/helpers/get_encrypted_password', {
+  const response = await fetch(BASE_URL + 'api/helpers/get_encrypted_password', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',

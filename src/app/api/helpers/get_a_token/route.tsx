@@ -1,6 +1,6 @@
 import { NextRequest } from 'next/server';
 import { dbConnect } from '@/app/lib/db';
-import { TOKEN_EXPIRE_TIME } from '@/app/lib/constants';
+import { BASE_URL, TOKEN_EXPIRE_TIME } from '@/app/lib/constants';
 import { createHash } from 'crypto';
 import { RowDataPacket } from 'mysql2'; // Import RowDataPacket to type the query result
 
@@ -17,7 +17,7 @@ async function generateToken(): Promise<string> {
 }
 
 async function getEncryptedPassword(password: string): Promise<string> {
-  const response = await fetch('http://localhost:3000/api/helpers/get_encrypted_password', {
+  const response = await fetch(BASE_URL + 'api/helpers/get_encrypted_password', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
