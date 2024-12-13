@@ -91,13 +91,12 @@ const LoginPage: React.FC = () => {
           )}
           <div className="flex gap-1">
             <Button
-              text="Login"
-              type="submit"
-              bgColor="bg-blue-600"
-              hoverColor="hover:bg-blue-700"
-              focusColor="focus:ring-blue-300"
-              onClick={handleLogin}
-            />
+  text="Login"
+  type="submit" // This makes the button trigger the form's onSubmit
+  bgColor="bg-blue-600"
+  hoverColor="hover:bg-blue-700"
+  focusColor="focus:ring-blue-300"
+/>
             <Button
               text="Reset"
               onClick={handleReset}
