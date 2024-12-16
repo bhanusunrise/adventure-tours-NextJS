@@ -47,10 +47,8 @@ export async function POST(req: NextRequest) {
     await fs.writeFile(filePath, Buffer.from(fileBuffer));
 
     // Fetch the maximum index from the about table
-    const [rows] = await connection.execute<{ maxIndex: number }[]>(
-      'SELECT MAX(`index`) as maxIndex FROM about'
-    );
-    const maxIndex = rows[0]?.maxIndex ?? 0;
+    const [rows] = await connection.execute('SELECT MAX(`index`) as maxIndex FROM about');
+    const maxIndex = (rows as { maxIndex: number }[])[0]?.maxIndex ?? 0;
 
     // Insert record into the About table with the new index
     const newIndex = maxIndex + 1;
