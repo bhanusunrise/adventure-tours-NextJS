@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { dbConnect } from '@/app/lib/db'; // Ensure this points to the correct database connection function
-//import mysql from 'mysql2/promise'; // Import mysql2 for executing queries with async/await
+import { RowDataPacket } from 'mysql2';
 
 export async function POST(req: NextRequest) {
   let connection;
@@ -11,9 +11,10 @@ export async function POST(req: NextRequest) {
     connection = await dbConnect();
 
     // Get the current indexes of both items
-    const [firstItems] = await connection.execute('SELECT * FROM about WHERE id = ?', [firstId]);
-    const [secondItems] = await connection.execute('SELECT * FROM about WHERE id = ?', [secondId]);
+    const [firstItems] = await connection.execute<RowDataPacket[]>('SELECT * FROM about WHERE id = ?', [firstId]);
+    const [secondItems] = await connection.execute<RowDataPacket[]>('SELECT * FROM about WHERE id = ?', [secondId]);
 
+    // Access the first item from the result set
     const firstItem = firstItems[0];
     const secondItem = secondItems[0];
 
