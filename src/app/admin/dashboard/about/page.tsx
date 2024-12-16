@@ -178,7 +178,7 @@ const AboutPage = () => {
         method: 'DELETE',
       });
 
-      const result = await response.json();
+      //const result = await response.json();
 
       if (response.ok) {
         // Remove the deleted about from the state
