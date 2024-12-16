@@ -1,14 +1,47 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Input from "@/app/components/form/input";
 import Button from "@/app/components/form/button";
 import Label from "@/app/components/form/label";
-import { Table, TableHead, TableRow } from "@/app/components/table";
+import { Table, TableHead, TableRow, TableCell, TableBody } from "@/app/components/table";
+
+type Destination = {
+  id: string;
+  name: string;
+  image_link: string;
+  index: number;
+};
 
 const DestinationsPage = () => {
   const [name, setName] = useState("");
   const [file, setFile] = useState<File | null>(null);
+  const [destinations, setDestinations] = useState<Destination[]>([]);
+  const [loading, setLoading] = useState(false);
+
+  // Fetch destinations
+  const fetchDestinations = async () => {
+    try {
+      setLoading(true);
+      const response = await fetch("/api/destinations/get_all_destinations");
+      if (response.ok) {
+        const data = await response.json();
+        setDestinations(data.destinations);
+      } else {
+        alert("Failed to fetch destinations");
+      }
+    } catch (error) {
+      console.error("Error fetching destinations:", error);
+      alert("An error occurred while fetching destinations.");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // Fetch destinations on component mount
+  useEffect(() => {
+    fetchDestinations();
+  }, []);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -30,9 +63,9 @@ const DestinationsPage = () => {
 
       if (response.ok) {
         alert("Destination added successfully");
-        // Optionally, reset form or fetch updated data
         setName("");
         setFile(null);
+        fetchDestinations(); // Refresh the destinations list
       } else {
         const data = await response.json();
         alert(data.error || "Failed to add destination");
@@ -105,16 +138,48 @@ const DestinationsPage = () => {
         {/* Right Section (3/4) */}
         <div className="w-full md:w-3/4 bg-gray-100 p-6 rounded-lg shadow-md dark:bg-gray-800">
           <p className="text-xl text-gray-100">Destinations</p>
-          <Table>
-            <TableRow className="text-gray-100 font-bold">
-              <TableHead>#</TableHead>
-              <TableHead>ID</TableHead>
-              <TableHead>Image</TableHead>
-              <TableHead>Destination</TableHead>
-              <TableHead>Order</TableHead>
-              <TableHead>Action</TableHead>
-            </TableRow>
-          </Table>
+
+          {loading ? (
+            <p className="text-gray-100">Loading...</p>
+          ) : (
+            <Table>
+              <TableRow className="text-gray-100 font-bold">
+                <TableHead>#</TableHead>
+                <TableHead>ID</TableHead>
+                <TableHead>Image</TableHead>
+                <TableHead>Destination</TableHead>
+                <TableHead>Order</TableHead>
+                <TableHead>Action</TableHead>
+              </TableRow>
+
+              <TableBody>
+                {destinations.map((destination, index) => (
+                  <TableRow key={destination.id}>
+                    <TableCell>{index + 1}</TableCell>
+                    <TableCell>{destination.id}</TableCell>
+                    <TableCell>
+                      <img
+                        src={destination.image_link}
+                        alt={destination.name}
+                        className="h-16 w-16 object-cover"
+                      />
+                    </TableCell>
+                    <TableCell>{destination.name}</TableCell>
+                    <TableCell>{destination.index}</TableCell>
+                    <TableCell>
+                      {/* Add action buttons here if needed */}
+                      <Button
+                        text="Delete"
+                        bgColor="bg-red-600"
+                        hoverColor="hover:bg-red-700"
+                        focusColor="focus:ring-red-300"
+                      />
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          )}
         </div>
       </div>
     </div>
