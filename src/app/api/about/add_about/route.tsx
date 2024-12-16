@@ -2,7 +2,7 @@ import { NextRequest } from 'next/server';
 import { dbConnect } from '@/app/lib/db';
 import path from 'path';
 import fs from 'fs/promises';
-import { RowDataPacket } from 'mysql2';
+//import { RowDataPacket } from 'mysql2';
 
 export async function POST(req: NextRequest) {
   try {

@@ -2,11 +2,10 @@ import React from 'react';
 
 interface ModalProps {
   isOpen: boolean;
-  onClose: () => void;
   children: React.ReactNode;
 }
 
-const Modal = ({ isOpen, onClose, children }: ModalProps) => {
+const Modal = ({ isOpen, children }: ModalProps) => {
   if (!isOpen) return null;
 
   return (
