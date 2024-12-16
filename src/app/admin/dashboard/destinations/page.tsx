@@ -172,8 +172,8 @@ const DestinationsPage = () => {
   };
 
   // Show image preview when file is selected
-  const getImagePreview = (file: File | null) => {
-    if (!file) return null;
+  const getImagePreview = (file: File | null): string => {
+    if (!file) return "";
     return URL.createObjectURL(file);
   };
 
@@ -335,20 +335,21 @@ const DestinationsPage = () => {
                   </div>
                 )}
 
-                <div className="mt-4 flex justify-center gap-4">
+                <div className="flex gap-1">
+                  <Button
+                    text="Update"
+                    type="submit"
+                    bgColor="bg-blue-600"
+                    hoverColor="hover:bg-blue-700"
+                    focusColor="focus:ring-blue-300"
+                  />
                   <Button
                     text="Cancel"
+                    type="button"
                     bgColor="bg-gray-500"
                     hoverColor="hover:bg-gray-600"
                     focusColor="focus:ring-gray-300"
                     onClick={closeEditModal}
-                  />
-                  <Button
-                    text="Update"
-                    bgColor="bg-blue-600"
-                    hoverColor="hover:bg-blue-700"
-                    focusColor="focus:ring-blue-300"
-                    type="submit"
                   />
                 </div>
               </form>
@@ -361,20 +362,20 @@ const DestinationsPage = () => {
       <Modal isOpen={deleteConfirmModal} onClose={closeDeleteModal}>
         <div className="text-center">
           <p className="text-xl text-gray-800">Are you sure you want to delete this destination?</p>
-          <div className="mt-4 flex justify-center gap-4">
+          <div className="flex gap-3 mt-6 justify-center">
             <Button
-              text="Cancel"
+              text="Yes"
+              bgColor="bg-red-600"
+              hoverColor="hover:bg-red-700"
+              focusColor="focus:ring-red-300"
+              onClick={handleDelete}
+            />
+            <Button
+              text="No"
               bgColor="bg-gray-500"
               hoverColor="hover:bg-gray-600"
               focusColor="focus:ring-gray-300"
               onClick={closeDeleteModal}
-            />
-            <Button
-              text="Delete"
-              bgColor="bg-red-600"
-              hoverColor="hover:bg-red-700"
-              focusColor="focus:ring-red-300"
-              onClick={handleDelete} // Proceed with delete action
             />
           </div>
         </div>
