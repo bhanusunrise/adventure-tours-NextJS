@@ -5,7 +5,7 @@ import Input from "@/app/components/form/input";
 import Button from "@/app/components/form/button";
 import Label from "@/app/components/form/label";
 import { Table, TableHead, TableRow, TableCell, TableBody } from "@/app/components/table";
-import Modal from "@/app/components/modal";  // Import the Modal component
+import Modal from "@/app/components/modal";
 
 type Destination = {
   id: string;
@@ -21,10 +21,10 @@ const DestinationsPage = () => {
   const [updateFile, setUpdateFile] = useState<File | null>(null);
   const [destinations, setDestinations] = useState<Destination[]>([]);
   const [loading, setLoading] = useState(false);
-  const [deleteConfirmModal, setDeleteConfirmModal] = useState(false); // State for delete confirmation modal visibility
-  const [editConfirmModal, setEditConfirmModal] = useState(false); // State for edit confirmation modal visibility
-  const [destinationToDelete, setDestinationToDelete] = useState<string | null>(null); // State to hold the destination ID to delete
-  const [destinationToUpdate, setDestinationToUpdate] = useState<Destination | null>(null); // State to hold the destination for update
+  const [deleteConfirmModal, setDeleteConfirmModal] = useState(false);
+  const [editConfirmModal, setEditConfirmModal] = useState(false);
+  const [destinationToDelete, setDestinationToDelete] = useState<string | null>(null);
+  const [destinationToUpdate, setDestinationToUpdate] = useState<Destination | null>(null);
 
   // Fetch destinations
   const fetchDestinations = async () => {
@@ -180,12 +180,10 @@ const DestinationsPage = () => {
   return (
     <div className="p-6">
       <p className="text-4xl font-semibold text-gray-100">Destinations</p>
-
       <div className="mt-10 flex flex-col md:flex-row gap-8">
         {/* Left Section (Add Destination Form) */}
         <div className="w-full md:w-1/4 bg-gray-100 p-6 rounded-lg shadow-md dark:bg-gray-800">
           <p className="text-xl text-gray-100">Add Destination</p>
-          <br />
           <form onSubmit={handleAddSubmit}>
             <div className="mb-6">
               <Label text="Name" htmlFor="add-name" />
@@ -376,7 +374,7 @@ const DestinationsPage = () => {
               bgColor="bg-red-600"
               hoverColor="hover:bg-red-700"
               focusColor="focus:ring-red-300"
-              onClick={handleDelete} // Call delete when confirmed
+              onClick={handleDelete} // Proceed with delete action
             />
           </div>
         </div>
