@@ -8,6 +8,13 @@ import Label from '@/app/components/form/label';
 import { Table, TableHead, TableRow, TableCell } from '@/app/components/table';
 import Modal from '@/app/components/modal';
 
+// Define the type for the about item
+interface About {
+  id: string;
+  description: string;
+  image_link: string;
+}
+
 const AboutPage = () => {
   // State for the Add Form
   const [addDescription, setAddDescription] = useState('');
@@ -15,7 +22,7 @@ const AboutPage = () => {
   const [imagePreview, setImagePreview] = useState<string | null>(null); // State for image preview
 
   // State for the About Data
-  const [abouts, setAbouts] = useState([]);
+  const [abouts, setAbouts] = useState<About[]>([]); // Define the state type here
 
   // State for the Update Modal
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -35,7 +42,7 @@ const AboutPage = () => {
         const response = await fetch('/api/about/get_all_abouts');
         if (response.ok) {
           const data = await response.json();
-          setAbouts(data.abouts);
+          setAbouts(data.abouts); // Assuming data.abouts is an array of About objects
         } else {
           console.error('Failed to fetch about entries');
         }
@@ -80,7 +87,7 @@ const AboutPage = () => {
   };
 
   // Open Update Modal and Load Selected Data
-  const handleUpdateClick = (about: { id: string; description: string; image_link: string }) => {
+  const handleUpdateClick = (about: About) => {
     setSelectedAboutId(about.id);
     setUpdateDescription(about.description);
     setCurrentImageLink(about.image_link);
@@ -230,52 +237,6 @@ const AboutPage = () => {
     setImagePreview(null); // Reset the image preview after clearing
   };
 
-
-  // Function to handle moving an item up
-const handleMoveUp = async (index: number) => {
-  const currentItem = abouts[index];
-  const previousItem = abouts[index - 1];
-
-  try {
-    await fetch('/api/about/swap_order', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ firstId: currentItem.id, secondId: previousItem.id }),
-    });
-
-    // Refetch the data after swap
-    const updatedAbouts = await fetchAbouts();
-    setAbouts(updatedAbouts);
-  } catch (error) {
-    console.error('Error moving item up:', error);
-  }
-};
-
-// Function to handle moving an item down
-const handleMoveDown = async (index: number) => {
-  const currentItem = abouts[index];
-  const nextItem = abouts[index + 1];
-
-  try {
-    await fetch('/api/about/swap_order', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ firstId: currentItem.id, secondId: nextItem.id }),
-    });
-
-    // Refetch the data after swap
-    const updatedAbouts = await fetchAbouts();
-    setAbouts(updatedAbouts);
-  } catch (error) {
-    console.error('Error moving item down:', error);
-  }
-};
-
-
   return (
     <div className="p-6">
       {/* Title */}
@@ -326,76 +287,84 @@ const handleMoveDown = async (index: number) => {
               <TableHead>ID</TableHead>
               <TableHead>Image</TableHead>
               <TableHead>Description</TableHead>
-              <TableHead>Order</TableHead>
-              <TableHead>Action</TableHead>
+              <TableHead>Actions</TableHead>
             </TableRow>
-            {abouts.map((about, index) => (
-              <TableRow key={about.id} className="text-gray-100">
-                <TableCell>{index + 1}</TableCell>
-                <TableCell>{about.id}</TableCell>
-                <TableCell>
-                  <img src={about.image_link} alt="About" className="w-16 h-16 object-cover rounded" />
-                </TableCell>
-                <TableCell>{about.description}</TableCell>
-                <TableCell>
-  {index > 0 && (
-    <Button text="Up" bgColor="bg-green-500" hoverColor="hover:bg-green-600" onClick={() => handleMoveUp(index)} />
-  )}
-  {index < abouts.length - 1 && (
-    <Button text="Down" bgColor="bg-blue-500" hoverColor="hover:bg-blue-600" onClick={() => handleMoveDown(index)} />
-  )}
-</TableCell>
-<TableCell> <Button text="Update" bgColor="bg-yellow-500" hoverColor="hover:bg-yellow-600" onClick={() => handleUpdateClick(about)} />
-  <Button text="Delete" bgColor="bg-red-600" hoverColor="hover:bg-red-700" onClick={() => openDeleteModal(about.id)} /></TableCell>
 
+            {abouts.length > 0 ? (
+              abouts.map((about, index) => (
+                <TableRow key={about.id}>
+                  <TableCell>{index + 1}</TableCell>
+                  <TableCell>{about.id}</TableCell>
+                  <TableCell>
+                    <img src={about.image_link} alt={about.description} className="w-32 h-32 object-cover" />
+                  </TableCell>
+                  <TableCell>{about.description}</TableCell>
+                  <TableCell>
+                    <button onClick={() => handleUpdateClick(about)} className="text-blue-500 hover:underline">Update</button>
+                    <button onClick={() => openDeleteModal(about.id)} className="ml-4 text-red-500 hover:underline">Delete</button>
+                  </TableCell>
+                </TableRow>
+              ))
+            ) : (
+              <TableRow>
+                <TableCell colSpan={5} className="text-center">No about descriptions found</TableCell>
               </TableRow>
-            ))}
+            )}
           </Table>
         </div>
       </div>
 
       {/* Update Modal */}
       <Modal isOpen={isModalOpen} onClose={closeModal}>
-        <form onSubmit={handleUpdate}>
-          <div className="mb-6">
-            <p className='text-xl font-semibold text-gray-100 mb-6'>Update About</p>
-            <Label text="Description" htmlFor="update-description" />
-            <Textarea
-              placeholder="Enter the updated description..."
-              rows={5}
-              required
-              value={updateDescription}
-              onChange={(e) => setUpdateDescription(e.target.value)}
-            />
-          </div>
+        <div className="p-6">
+          <p className="text-xl text-gray-100">Update About</p>
+          <form onSubmit={handleUpdate}>
+            <div className="mb-6">
+              <Label text="Description" htmlFor="update-description" />
+              <Textarea
+                placeholder="Update the description..."
+                rows={5}
+                required
+                value={updateDescription}
+                onChange={(e) => setUpdateDescription(e.target.value)}
+              />
+            </div>
 
-          <div className="mb-6">
-            <Label text="Upload File" htmlFor="update-file" />
-            <Input
-              type="file"
-              accept="image/*"
-              onChange={handleUpdateFileChange} // Handle file change for update
-            />
-          </div>
+            <div className="mb-6">
+              <Label text="Upload File" htmlFor="update-file" />
+              <Input
+                type="file"
+                accept="image/*"
+                onChange={handleUpdateFileChange}
+              />
+              {updateImagePreview && <img src={updateImagePreview} alt="Preview" className="w-32 h-32 object-cover mt-2" />}
+            </div>
 
-          {/* Show image preview for the update */}
-          {updateImagePreview && <img src={updateImagePreview} alt="Current Image" className="w-32 h-32 object-cover mb-6" />}
-          
-          <div className="space-x-1">
-            <Button text="Update" bgColor="bg-yellow-600" hoverColor="hover:bg-yellow-700" type="submit" />
-            <Button text="Cancel" bgColor="bg-gray-500" hoverColor="hover:bg-gray-600" onClick={closeModal} />
-          </div>
-        </form>
+            <div className="space-x-1">
+              <Button text="Update" bgColor="bg-blue-600" hoverColor="hover:bg-blue-700" type="submit" />
+              <Button text="Cancel" bgColor="bg-gray-500" hoverColor="hover:bg-gray-600" onClick={closeModal} />
+            </div>
+          </form>
+        </div>
       </Modal>
 
-      {/* Delete Confirmation Modal */}
+      {/* Delete Modal */}
       <Modal isOpen={isDeleteModalOpen} onClose={closeDeleteModal}>
-        <div className="">
-          <p className='text-xl font-semibold text-gray-100 mb-3'>Confirm Deletion</p>
-          <p className="text-lg text-gray-100">Are you sure you want to delete this about description?</p>
-          <div className="space-x-1 mt-4">
-            <Button text="Delete" bgColor="bg-red-600" hoverColor="hover:bg-red-700" onClick={handleDelete} />
-            <Button text="Cancel" bgColor="bg-gray-500" hoverColor="hover:bg-gray-600" onClick={closeDeleteModal} />          
+        <div className="p-6">
+          <p className="text-xl text-gray-100">Are you sure you want to delete this item?</p>
+          <div className="space-x-2 mt-4">
+            <Button
+              text="Delete"
+              bgColor="bg-red-600"
+              hoverColor="hover:bg-red-700"
+              onClick={handleDelete}
+            />
+            <Button
+              text="Cancel"
+              bgColor="bg-gray-500"
+              hoverColor="hover:bg-gray-600"
+              onClick={closeDeleteModal}
+            />
           </div>
         </div>
       </Modal>
