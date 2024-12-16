@@ -25,9 +25,10 @@ export async function DELETE(req: NextRequest) {
 
     // Check if the about entry exists
     const [result] = await connection.query<AboutResult[]>(
-      'SELECT image_link FROM about WHERE id = ?',
-      [id]
-    );
+  'SELECT image_link FROM about WHERE id = ?',
+  [id]
+);
+
 
     if (result.length === 0) {
       return new Response(
