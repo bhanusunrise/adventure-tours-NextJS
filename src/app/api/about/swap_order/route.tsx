@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { dbConnect } from '@/app/lib/db'; // Ensure this points to the correct database connection function
-import mysql from 'mysql2/promise'; // Import mysql2 for executing queries with async/await
+//import mysql from 'mysql2/promise'; // Import mysql2 for executing queries with async/await
 
 export async function POST(req: NextRequest) {
   let connection;
