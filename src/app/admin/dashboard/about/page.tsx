@@ -272,8 +272,20 @@ const AboutPage = () => {
             </div>
 
             <div className="space-x-1">
-              <Button text="Add" bgColor="bg-blue-600" hoverColor="hover:bg-blue-700" type="submit" />
-              <Button text="Clear" bgColor="bg-gray-500" hoverColor="hover:bg-gray-600" onClick={handleClear} />
+              <Button
+                text="Add"
+                bgColor="bg-blue-600"
+                hoverColor="hover:bg-blue-700"
+                focusColor="focus:ring-blue-500" // Add focusColor prop
+                type="submit"
+              />
+              <Button
+                text="Clear"
+                bgColor="bg-gray-500"
+                hoverColor="hover:bg-gray-600"
+                focusColor="focus:ring-gray-500" // Add focusColor prop
+                onClick={handleClear}
+              />
             </div>
           </form>
         </div>
@@ -300,14 +312,28 @@ const AboutPage = () => {
                   </TableCell>
                   <TableCell>{about.description}</TableCell>
                   <TableCell>
-                    <button onClick={() => handleUpdateClick(about)} className="text-blue-500 hover:underline">Update</button>
-                    <button onClick={() => openDeleteModal(about.id)} className="ml-4 text-red-500 hover:underline">Delete</button>
+                    <Button
+                      text="Update"
+                      bgColor="bg-green-600"
+                      hoverColor="hover:bg-green-700"
+                      focusColor="focus:ring-green-500" // Add focusColor prop
+                      onClick={() => handleUpdateClick(about)}
+                    />
+                    <Button
+                      text="Delete"
+                      bgColor="bg-red-600"
+                      hoverColor="hover:bg-red-700"
+                      focusColor="focus:ring-red-500" // Add focusColor prop
+                      onClick={() => openDeleteModal(about.id)}
+                    />
                   </TableCell>
                 </TableRow>
               ))
             ) : (
               <TableRow>
-                <TableCell colSpan={5} className="text-center">No about descriptions found</TableCell>
+                <TableCell colSpan={5} className="text-center text-gray-100">
+                  No about entries found.
+                </TableCell>
               </TableRow>
             )}
           </Table>
@@ -315,57 +341,73 @@ const AboutPage = () => {
       </div>
 
       {/* Update Modal */}
-      <Modal isOpen={isModalOpen} onClose={closeModal}>
-        <div className="p-6">
-          <p className="text-xl text-gray-100">Update About</p>
-          <form onSubmit={handleUpdate}>
-            <div className="mb-6">
-              <Label text="Description" htmlFor="update-description" />
-              <Textarea
-                placeholder="Update the description..."
-                rows={5}
-                required
-                value={updateDescription}
-                onChange={(e) => setUpdateDescription(e.target.value)}
+      <Modal open={isModalOpen} onClose={closeModal}>
+        <form onSubmit={handleUpdate}>
+          <div className="mb-6">
+            <Label text="Description" htmlFor="update-description" />
+            <Textarea
+              placeholder="Update description..."
+              rows={5}
+              required
+              value={updateDescription}
+              onChange={(e) => setUpdateDescription(e.target.value)}
+            />
+          </div>
+
+          <div className="mb-6">
+            <Label text="Upload File" htmlFor="update-file" />
+            <Input
+              type="file"
+              accept="image/*"
+              onChange={handleUpdateFileChange} // Handle file change for update
+            />
+            {/* Display the update image preview */}
+            {updateImagePreview && (
+              <img
+                src={updateImagePreview}
+                alt="Preview"
+                className="w-32 h-32 object-cover mt-2"
               />
-            </div>
+            )}
+          </div>
 
-            <div className="mb-6">
-              <Label text="Upload File" htmlFor="update-file" />
-              <Input
-                type="file"
-                accept="image/*"
-                onChange={handleUpdateFileChange}
-              />
-              {updateImagePreview && <img src={updateImagePreview} alt="Preview" className="w-32 h-32 object-cover mt-2" />}
-            </div>
-
-            <div className="space-x-1">
-              <Button text="Update" bgColor="bg-blue-600" hoverColor="hover:bg-blue-700" type="submit" />
-              <Button text="Cancel" bgColor="bg-gray-500" hoverColor="hover:bg-gray-600" onClick={closeModal} />
-            </div>
-          </form>
-        </div>
-      </Modal>
-
-      {/* Delete Modal */}
-      <Modal isOpen={isDeleteModalOpen} onClose={closeDeleteModal}>
-        <div className="p-6">
-          <p className="text-xl text-gray-100">Are you sure you want to delete this item?</p>
-          <div className="space-x-2 mt-4">
+          <div className="space-x-1">
             <Button
-              text="Delete"
-              bgColor="bg-red-600"
-              hoverColor="hover:bg-red-700"
-              onClick={handleDelete}
+              text="Update"
+              bgColor="bg-blue-600"
+              hoverColor="hover:bg-blue-700"
+              focusColor="focus:ring-blue-500" // Add focusColor prop
+              type="submit"
             />
             <Button
               text="Cancel"
               bgColor="bg-gray-500"
               hoverColor="hover:bg-gray-600"
-              onClick={closeDeleteModal}
+              focusColor="focus:ring-gray-500" // Add focusColor prop
+              onClick={closeModal}
             />
           </div>
+        </form>
+      </Modal>
+
+      {/* Delete Confirmation Modal */}
+      <Modal open={isDeleteModalOpen} onClose={closeDeleteModal}>
+        <p className="text-gray-100">Are you sure you want to delete this about entry?</p>
+        <div className="mt-4 space-x-1">
+          <Button
+            text="Yes"
+            bgColor="bg-red-600"
+            hoverColor="hover:bg-red-700"
+            focusColor="focus:ring-red-500" // Add focusColor prop
+            onClick={handleDelete}
+          />
+          <Button
+            text="No"
+            bgColor="bg-gray-500"
+            hoverColor="hover:bg-gray-600"
+            focusColor="focus:ring-gray-500" // Add focusColor prop
+            onClick={closeDeleteModal}
+          />
         </div>
       </Modal>
     </div>
