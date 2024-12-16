@@ -15,12 +15,16 @@ type Destination = {
 };
 
 const DestinationsPage = () => {
-  const [name, setName] = useState("");
-  const [file, setFile] = useState<File | null>(null);
+  const [addName, setAddName] = useState("");
+  const [addFile, setAddFile] = useState<File | null>(null);
+  const [updateName, setUpdateName] = useState("");
+  const [updateFile, setUpdateFile] = useState<File | null>(null);
   const [destinations, setDestinations] = useState<Destination[]>([]);
   const [loading, setLoading] = useState(false);
-  const [isModalOpen, setIsModalOpen] = useState(false); // State for modal visibility
+  const [deleteConfirmModal, setDeleteConfirmModal] = useState(false); // State for delete confirmation modal visibility
+  const [editConfirmModal, setEditConfirmModal] = useState(false); // State for edit confirmation modal visibility
   const [destinationToDelete, setDestinationToDelete] = useState<string | null>(null); // State to hold the destination ID to delete
+  const [destinationToUpdate, setDestinationToUpdate] = useState<Destination | null>(null); // State to hold the destination for update
 
   // Fetch destinations
   const fetchDestinations = async () => {
@@ -46,18 +50,18 @@ const DestinationsPage = () => {
     fetchDestinations();
   }, []);
 
-  // Handle form submission
-  const handleSubmit = async (e: React.FormEvent) => {
+  // Handle Add Form Submission
+  const handleAddSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    if (!name || !file) {
+    if (!addName || !addFile) {
       alert("Name and file are required");
       return;
     }
 
     const formData = new FormData();
-    formData.append("name", name);
-    formData.append("file", file);
+    formData.append("name", addName);
+    formData.append("file", addFile);
 
     try {
       const response = await fetch("/api/destinations/add_destination", {
@@ -67,8 +71,8 @@ const DestinationsPage = () => {
 
       if (response.ok) {
         alert("Destination added successfully");
-        setName("");
-        setFile(null);
+        setAddName("");
+        setAddFile(null);
         fetchDestinations(); // Refresh the destinations list
       } else {
         const data = await response.json();
@@ -80,16 +84,67 @@ const DestinationsPage = () => {
     }
   };
 
-  // Open modal for deletion
-  const openDeleteModal = (id: string) => {
-    setDestinationToDelete(id);
-    setIsModalOpen(true);
+  // Handle Update Form Submission
+  const handleUpdateSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+
+    if (!updateName) {
+      alert("Name is required");
+      return;
+    }
+
+    const formData = new FormData();
+    formData.append("id", destinationToUpdate?.id || "");
+    formData.append("name", updateName);
+    if (updateFile) {
+      formData.append("file", updateFile);
+    }
+
+    try {
+      const response = await fetch("/api/destinations/update_destination", {
+        method: "PUT",
+        body: formData,
+      });
+
+      if (response.ok) {
+        alert("Destination updated successfully");
+        setUpdateName("");
+        setUpdateFile(null);
+        fetchDestinations(); // Refresh the destinations list
+        setEditConfirmModal(false);
+      } else {
+        const data = await response.json();
+        alert(data.error || "Failed to update destination");
+      }
+    } catch (error) {
+      console.error("Error updating destination:", error);
+      alert("An error occurred. Please try again.");
+    }
   };
 
-  // Close modal
+  // Open delete confirmation modal
+  const openDeleteModal = (id: string) => {
+    setDestinationToDelete(id);
+    setDeleteConfirmModal(true);
+  };
+
+  // Open update form modal
+  const openUpdateModal = (destination: Destination) => {
+    setDestinationToUpdate(destination);
+    setUpdateName(destination.name);
+    setEditConfirmModal(true);
+  };
+
+  // Close delete confirmation modal
   const closeDeleteModal = () => {
-    setIsModalOpen(false);
+    setDeleteConfirmModal(false);
     setDestinationToDelete(null);
+  };
+
+  // Close edit confirmation modal
+  const closeEditModal = () => {
+    setEditConfirmModal(false);
+    setDestinationToUpdate(null);
   };
 
   // Handle delete action
@@ -116,42 +171,55 @@ const DestinationsPage = () => {
     }
   };
 
+  // Show image preview when file is selected
+  const getImagePreview = (file: File | null) => {
+    if (!file) return null;
+    return URL.createObjectURL(file);
+  };
+
   return (
     <div className="p-6">
-      {/* Title */}
       <p className="text-4xl font-semibold text-gray-100">Destinations</p>
 
       <div className="mt-10 flex flex-col md:flex-row gap-8">
-        {/* Left Section (1/4) */}
+        {/* Left Section (Add Destination Form) */}
         <div className="w-full md:w-1/4 bg-gray-100 p-6 rounded-lg shadow-md dark:bg-gray-800">
           <p className="text-xl text-gray-100">Add Destination</p>
           <br />
-          <form onSubmit={handleSubmit}>
-            {/* Text Input */}
+          <form onSubmit={handleAddSubmit}>
             <div className="mb-6">
-              <Label text="Name" htmlFor="name" />
+              <Label text="Name" htmlFor="add-name" />
               <Input
                 type="text"
                 required
                 className="mt-1"
-                value={name}
-                onChange={(e) => setName(e.target.value)}
+                value={addName}
+                onChange={(e) => setAddName(e.target.value)}
               />
             </div>
 
-            {/* File Input */}
             <div className="mb-6">
-              <Label text="Upload File" htmlFor="file-upload" />
+              <Label text="Upload File" htmlFor="add-file-upload" />
               <Input
                 type="file"
                 required
                 className="mt-1"
                 accept="image/*"
-                onChange={(e) => setFile(e.target.files?.[0] || null)}
+                onChange={(e) => setAddFile(e.target.files?.[0] || null)}
               />
             </div>
 
-            {/* Buttons */}
+            {addFile && (
+              <div className="mb-6">
+                <p className="text-gray-500">Image Preview:</p>
+                <img
+                  src={getImagePreview(addFile)}
+                  alt="Image Preview"
+                  className="h-16 w-16 object-cover mt-2"
+                />
+              </div>
+            )}
+
             <div className="flex gap-1">
               <Button
                 text="Add"
@@ -167,15 +235,15 @@ const DestinationsPage = () => {
                 hoverColor="hover:bg-gray-600"
                 focusColor="focus:ring-gray-300"
                 onClick={() => {
-                  setName("");
-                  setFile(null);
+                  setAddName("");
+                  setAddFile(null);
                 }}
               />
             </div>
           </form>
         </div>
 
-        {/* Right Section (3/4) */}
+        {/* Right Section (Destinations List) */}
         <div className="w-full md:w-3/4 bg-gray-100 p-6 rounded-lg shadow-md dark:bg-gray-800">
           <p className="text-xl text-gray-100">Destinations</p>
 
@@ -208,11 +276,18 @@ const DestinationsPage = () => {
                     <TableCell>{destination.index}</TableCell>
                     <TableCell>
                       <Button
+                        text="Edit"
+                        bgColor="bg-yellow-600"
+                        hoverColor="hover:bg-yellow-700"
+                        focusColor="focus:ring-yellow-300"
+                        onClick={() => openUpdateModal(destination)} // Open modal to update destination
+                      />
+                      <Button
                         text="Delete"
                         bgColor="bg-red-600"
                         hoverColor="hover:bg-red-700"
                         focusColor="focus:ring-red-300"
-                        onClick={() => openDeleteModal(destination.id)} // Open modal on delete
+                        onClick={() => openDeleteModal(destination.id)} // Open modal for deletion
                       />
                     </TableCell>
                   </TableRow>
@@ -223,8 +298,69 @@ const DestinationsPage = () => {
         </div>
       </div>
 
+      {/* Update Confirmation Modal */}
+      <Modal isOpen={editConfirmModal} onClose={closeEditModal}>
+        <div className="text-center">
+          {destinationToUpdate && (
+            <>
+              <p className="text-xl text-gray-800">Edit Destination</p>
+              <form onSubmit={handleUpdateSubmit}>
+                <div className="mb-6">
+                  <Label text="Name" htmlFor="update-name" />
+                  <Input
+                    type="text"
+                    required
+                    className="mt-1"
+                    value={updateName}
+                    onChange={(e) => setUpdateName(e.target.value)}
+                  />
+                </div>
+
+                <div className="mb-6">
+                  <Label text="Upload File" htmlFor="update-file-upload" />
+                  <Input
+                    type="file"
+                    className="mt-1"
+                    accept="image/*"
+                    onChange={(e) => setUpdateFile(e.target.files?.[0] || null)}
+                  />
+                </div>
+
+                {updateFile && (
+                  <div className="mb-6">
+                    <p className="text-gray-500">Image Preview:</p>
+                    <img
+                      src={getImagePreview(updateFile)}
+                      alt="Image Preview"
+                      className="h-16 w-16 object-cover mt-2"
+                    />
+                  </div>
+                )}
+
+                <div className="mt-4 flex justify-center gap-4">
+                  <Button
+                    text="Cancel"
+                    bgColor="bg-gray-500"
+                    hoverColor="hover:bg-gray-600"
+                    focusColor="focus:ring-gray-300"
+                    onClick={closeEditModal}
+                  />
+                  <Button
+                    text="Update"
+                    bgColor="bg-blue-600"
+                    hoverColor="hover:bg-blue-700"
+                    focusColor="focus:ring-blue-300"
+                    type="submit"
+                  />
+                </div>
+              </form>
+            </>
+          )}
+        </div>
+      </Modal>
+
       {/* Delete Confirmation Modal */}
-      <Modal isOpen={isModalOpen} onClose={closeDeleteModal}>
+      <Modal isOpen={deleteConfirmModal} onClose={closeDeleteModal}>
         <div className="text-center">
           <p className="text-xl text-gray-800">Are you sure you want to delete this destination?</p>
           <div className="mt-4 flex justify-center gap-4">
