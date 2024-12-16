@@ -1,8 +1,7 @@
-import { NextRequest } from 'next/server';
 import { dbConnect } from '@/app/lib/db';
 import { RowDataPacket } from 'mysql2';
 
-export async function GET(req: NextRequest) {
+export async function GET() {
   try {
     const connection = await dbConnect(); // Connect to the database
 
