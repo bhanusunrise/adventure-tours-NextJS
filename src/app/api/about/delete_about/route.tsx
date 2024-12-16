@@ -2,6 +2,7 @@ import { NextRequest } from 'next/server';
 import { dbConnect } from '@/app/lib/db';
 import path from 'path';
 import fs from 'fs/promises';
+import { RowDataPacket } from 'mysql2';
 
 // Define the type for the query result
 interface AboutResult {
@@ -24,11 +25,13 @@ export async function DELETE(req: NextRequest) {
     const connection = await dbConnect(); // Connect to the database
 
     // Check if the about entry exists
-    const [result] = await connection.query<AboutResult[]>(
-  'SELECT image_link FROM about WHERE id = ?',
-  [id]
-);
+    const [rows] = await connection.query<RowDataPacket[]>(
+      'SELECT image_link FROM about WHERE id = ?',
+      [id]
+    );
 
+    // Since `rows` is a `RowDataPacket[]`, we can manually cast it to `AboutResult[]`
+    const result: AboutResult[] = rows as AboutResult[];
 
     if (result.length === 0) {
       return new Response(
