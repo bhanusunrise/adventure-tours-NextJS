@@ -65,8 +65,6 @@ const AboutPage = () => {
         body: formData,
       });
 
-     // const result = await response.json();
-
       if (response.ok) {
         setAddDescription('');
         setAddFile(null);
@@ -108,8 +106,6 @@ const AboutPage = () => {
         method: 'PUT',
         body: formData,
       });
-
-      //const result = await response.json();
 
       if (response.ok) {
         // If a new image was uploaded, delete the old image
@@ -178,8 +174,6 @@ const AboutPage = () => {
         method: 'DELETE',
       });
 
-      //const result = await response.json();
-
       if (response.ok) {
         // Remove the deleted about from the state
         setAbouts(abouts.filter(about => about.id !== selectedAboutId));
@@ -229,6 +223,59 @@ const AboutPage = () => {
     }
   };
 
+  // Handle Clear Button click for Add Form
+  const handleClear = () => {
+    setAddDescription('');
+    setAddFile(null);
+    setImagePreview(null); // Reset the image preview after clearing
+  };
+
+
+  // Function to handle moving an item up
+const handleMoveUp = async (index: number) => {
+  const currentItem = abouts[index];
+  const previousItem = abouts[index - 1];
+
+  try {
+    await fetch('/api/about/swap_order', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ firstId: currentItem.id, secondId: previousItem.id }),
+    });
+
+    // Refetch the data after swap
+    const updatedAbouts = await fetchAbouts();
+    setAbouts(updatedAbouts);
+  } catch (error) {
+    console.error('Error moving item up:', error);
+  }
+};
+
+// Function to handle moving an item down
+const handleMoveDown = async (index: number) => {
+  const currentItem = abouts[index];
+  const nextItem = abouts[index + 1];
+
+  try {
+    await fetch('/api/about/swap_order', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ firstId: currentItem.id, secondId: nextItem.id }),
+    });
+
+    // Refetch the data after swap
+    const updatedAbouts = await fetchAbouts();
+    setAbouts(updatedAbouts);
+  } catch (error) {
+    console.error('Error moving item down:', error);
+  }
+};
+
+
   return (
     <div className="p-6">
       {/* Title */}
@@ -263,7 +310,10 @@ const AboutPage = () => {
               {imagePreview && <img src={imagePreview} alt="Preview" className="w-32 h-32 object-cover mt-2" />}
             </div>
 
-            <Button text="Add" bgColor="bg-blue-600" hoverColor="hover:bg-blue-700" type="submit" />
+            <div className="space-x-1">
+              <Button text="Add" bgColor="bg-blue-600" hoverColor="hover:bg-blue-700" type="submit" />
+              <Button text="Clear" bgColor="bg-gray-500" hoverColor="hover:bg-gray-600" onClick={handleClear} />
+            </div>
           </form>
         </div>
 
@@ -276,6 +326,7 @@ const AboutPage = () => {
               <TableHead>ID</TableHead>
               <TableHead>Image</TableHead>
               <TableHead>Description</TableHead>
+              <TableHead>Order</TableHead>
               <TableHead>Action</TableHead>
             </TableRow>
             {abouts.map((about, index) => (
@@ -287,9 +338,16 @@ const AboutPage = () => {
                 </TableCell>
                 <TableCell>{about.description}</TableCell>
                 <TableCell>
-                  <Button text="Update" bgColor="bg-yellow-500" hoverColor="hover:bg-yellow-600" onClick={() => handleUpdateClick(about)} />
-                  <Button text="Delete" bgColor="bg-red-600" hoverColor="hover:bg-red-700" onClick={() => openDeleteModal(about.id)} />
-                </TableCell>
+  {index > 0 && (
+    <Button text="Up" bgColor="bg-green-500" hoverColor="hover:bg-green-600" onClick={() => handleMoveUp(index)} />
+  )}
+  {index < abouts.length - 1 && (
+    <Button text="Down" bgColor="bg-blue-500" hoverColor="hover:bg-blue-600" onClick={() => handleMoveDown(index)} />
+  )}
+</TableCell>
+<TableCell> <Button text="Update" bgColor="bg-yellow-500" hoverColor="hover:bg-yellow-600" onClick={() => handleUpdateClick(about)} />
+  <Button text="Delete" bgColor="bg-red-600" hoverColor="hover:bg-red-700" onClick={() => openDeleteModal(about.id)} /></TableCell>
+
               </TableRow>
             ))}
           </Table>
@@ -326,7 +384,6 @@ const AboutPage = () => {
           <div className="space-x-1">
             <Button text="Update" bgColor="bg-yellow-600" hoverColor="hover:bg-yellow-700" type="submit" />
             <Button text="Cancel" bgColor="bg-gray-500" hoverColor="hover:bg-gray-600" onClick={closeModal} />
-            
           </div>
         </form>
       </Modal>

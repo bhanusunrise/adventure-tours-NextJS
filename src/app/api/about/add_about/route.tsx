@@ -2,9 +2,10 @@ import { NextRequest } from 'next/server';
 import { dbConnect } from '@/app/lib/db';
 import path from 'path';
 import fs from 'fs/promises';
-//import { RowDataPacket } from 'mysql2';
 
 export async function POST(req: NextRequest) {
+  let connection;
+
   try {
     const formData = await req.formData();
     const description = formData.get('description') as string;
@@ -17,7 +18,7 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    const connection = await dbConnect(); // Connect to the database
+    connection = await dbConnect(); // Connect to the database
     const uploadDir = path.join(process.cwd(), 'public/uploads/about');
 
     // Ensure the upload directory exists
@@ -45,11 +46,16 @@ export async function POST(req: NextRequest) {
     const fileBuffer = await file.arrayBuffer();
     await fs.writeFile(filePath, Buffer.from(fileBuffer));
 
-    // Insert record into the About table
+    // Fetch the maximum index from the about table
+    const [rows] = await connection.execute('SELECT MAX(`index`) as maxIndex FROM about');
+    const maxIndex = rows[0]?.maxIndex ?? 0;
+
+    // Insert record into the About table with the new index
+    const newIndex = maxIndex + 1;
     const imageLink = `/uploads/about/${newFileName}`;
-    await connection.query(
+    await connection.execute(
       'INSERT INTO about (id, `index`, description, image_link) VALUES (?, ?, ?, ?)',
-      [`ABOUT_${nextNumber}`, 1, description, imageLink]
+      [`ABOUT_${nextNumber}`, newIndex, description, imageLink]
     );
 
     return new Response(
@@ -62,5 +68,9 @@ export async function POST(req: NextRequest) {
       JSON.stringify({ error: 'Internal Server Error' }),
       { status: 500, headers: { 'Content-Type': 'application/json' } }
     );
+  } finally {
+    if (connection) {
+      await connection.end();
+    }
   }
 }
