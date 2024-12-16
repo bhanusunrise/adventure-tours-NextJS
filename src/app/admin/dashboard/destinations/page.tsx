@@ -5,6 +5,7 @@ import Input from "@/app/components/form/input";
 import Button from "@/app/components/form/button";
 import Label from "@/app/components/form/label";
 import { Table, TableHead, TableRow, TableCell, TableBody } from "@/app/components/table";
+import Modal from "@/app/components/modal";  // Import the Modal component
 
 type Destination = {
   id: string;
@@ -18,6 +19,8 @@ const DestinationsPage = () => {
   const [file, setFile] = useState<File | null>(null);
   const [destinations, setDestinations] = useState<Destination[]>([]);
   const [loading, setLoading] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false); // State for modal visibility
+  const [destinationToDelete, setDestinationToDelete] = useState<string | null>(null); // State to hold the destination ID to delete
 
   // Fetch destinations
   const fetchDestinations = async () => {
@@ -43,6 +46,7 @@ const DestinationsPage = () => {
     fetchDestinations();
   }, []);
 
+  // Handle form submission
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
@@ -73,6 +77,42 @@ const DestinationsPage = () => {
     } catch (error) {
       console.error("Error submitting form:", error);
       alert("An error occurred. Please try again.");
+    }
+  };
+
+  // Open modal for deletion
+  const openDeleteModal = (id: string) => {
+    setDestinationToDelete(id);
+    setIsModalOpen(true);
+  };
+
+  // Close modal
+  const closeDeleteModal = () => {
+    setIsModalOpen(false);
+    setDestinationToDelete(null);
+  };
+
+  // Handle delete action
+  const handleDelete = async () => {
+    if (!destinationToDelete) return;
+
+    try {
+      const response = await fetch(`/api/destinations/delete_destination?id=${destinationToDelete}`, {
+        method: "DELETE",
+      });
+
+      if (response.ok) {
+        alert("Destination deleted successfully");
+        fetchDestinations(); // Refresh the destinations list
+      } else {
+        const data = await response.json();
+        alert(data.error || "Failed to delete destination");
+      }
+    } catch (error) {
+      console.error("Error deleting destination:", error);
+      alert("An error occurred while deleting the destination.");
+    } finally {
+      closeDeleteModal();
     }
   };
 
@@ -167,12 +207,12 @@ const DestinationsPage = () => {
                     <TableCell>{destination.name}</TableCell>
                     <TableCell>{destination.index}</TableCell>
                     <TableCell>
-                      {/* Add action buttons here if needed */}
                       <Button
                         text="Delete"
                         bgColor="bg-red-600"
                         hoverColor="hover:bg-red-700"
                         focusColor="focus:ring-red-300"
+                        onClick={() => openDeleteModal(destination.id)} // Open modal on delete
                       />
                     </TableCell>
                   </TableRow>
@@ -182,6 +222,29 @@ const DestinationsPage = () => {
           )}
         </div>
       </div>
+
+      {/* Delete Confirmation Modal */}
+      <Modal isOpen={isModalOpen} onClose={closeDeleteModal}>
+        <div className="text-center">
+          <p className="text-xl text-gray-800">Are you sure you want to delete this destination?</p>
+          <div className="mt-4 flex justify-center gap-4">
+            <Button
+              text="Cancel"
+              bgColor="bg-gray-500"
+              hoverColor="hover:bg-gray-600"
+              focusColor="focus:ring-gray-300"
+              onClick={closeDeleteModal}
+            />
+            <Button
+              text="Delete"
+              bgColor="bg-red-600"
+              hoverColor="hover:bg-red-700"
+              focusColor="focus:ring-red-300"
+              onClick={handleDelete} // Call delete when confirmed
+            />
+          </div>
+        </div>
+      </Modal>
     </div>
   );
 };
