@@ -3,6 +3,11 @@ import { dbConnect } from '@/app/lib/db';
 import path from 'path';
 import fs from 'fs/promises';
 
+// Define the type for the query result
+interface AboutResult {
+  image_link: string;
+}
+
 export async function DELETE(req: NextRequest) {
   try {
     // Get the About ID from the query parameters
@@ -19,12 +24,12 @@ export async function DELETE(req: NextRequest) {
     const connection = await dbConnect(); // Connect to the database
 
     // Check if the about entry exists
-    const [result] = await connection.query(
+    const [result] = await connection.query<AboutResult[]>(
       'SELECT image_link FROM about WHERE id = ?',
       [id]
     );
 
-    if ((result as any).length === 0) {
+    if (result.length === 0) {
       return new Response(
         JSON.stringify({ error: 'About entry not found' }),
         { status: 404, headers: { 'Content-Type': 'application/json' } }
@@ -32,7 +37,7 @@ export async function DELETE(req: NextRequest) {
     }
 
     // Get the image link from the result
-    const imageLink = (result as any)[0].image_link;
+    const imageLink = result[0].image_link;
 
     // Remove the image file from the server
     const filePath = path.join(process.cwd(), 'public', imageLink);
