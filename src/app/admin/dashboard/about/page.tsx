@@ -341,75 +341,76 @@ const AboutPage = () => {
       </div>
 
       {/* Update Modal */}
-      <Modal open={isModalOpen} onClose={closeModal}>
-        <form onSubmit={handleUpdate}>
-          <div className="mb-6">
-            <Label text="Description" htmlFor="update-description" />
-            <Textarea
-              placeholder="Update description..."
-              rows={5}
-              required
-              value={updateDescription}
-              onChange={(e) => setUpdateDescription(e.target.value)}
-            />
-          </div>
+      <Modal isOpen={isModalOpen} onClose={closeModal}>
+  <form onSubmit={handleUpdate}>
+    <div className="mb-6">
+      <Label text="Description" htmlFor="update-description" />
+      <Textarea
+        placeholder="Update description..."
+        rows={5}
+        required
+        value={updateDescription}
+        onChange={(e) => setUpdateDescription(e.target.value)}
+      />
+    </div>
 
-          <div className="mb-6">
-            <Label text="Upload File" htmlFor="update-file" />
-            <Input
-              type="file"
-              accept="image/*"
-              onChange={handleUpdateFileChange} // Handle file change for update
-            />
-            {/* Display the update image preview */}
-            {updateImagePreview && (
-              <img
-                src={updateImagePreview}
-                alt="Preview"
-                className="w-32 h-32 object-cover mt-2"
-              />
-            )}
-          </div>
+    <div className="mb-6">
+      <Label text="Upload File" htmlFor="update-file" />
+      <Input
+        type="file"
+        accept="image/*"
+        onChange={handleUpdateFileChange} // Handle file change for update
+      />
+      {/* Display the update image preview */}
+      {updateImagePreview && (
+        <img
+          src={updateImagePreview}
+          alt="Preview"
+          className="w-32 h-32 object-cover mt-2"
+        />
+      )}
+    </div>
 
-          <div className="space-x-1">
-            <Button
-              text="Update"
-              bgColor="bg-blue-600"
-              hoverColor="hover:bg-blue-700"
-              focusColor="focus:ring-blue-500" // Add focusColor prop
-              type="submit"
-            />
-            <Button
-              text="Cancel"
-              bgColor="bg-gray-500"
-              hoverColor="hover:bg-gray-600"
-              focusColor="focus:ring-gray-500" // Add focusColor prop
-              onClick={closeModal}
-            />
-          </div>
-        </form>
-      </Modal>
+    <div className="space-x-1">
+      <Button
+        text="Update"
+        bgColor="bg-blue-600"
+        hoverColor="hover:bg-blue-700"
+        focusColor="focus:ring-blue-500" // Add focusColor prop
+        type="submit"
+      />
+      <Button
+        text="Cancel"
+        bgColor="bg-gray-500"
+        hoverColor="hover:bg-gray-600"
+        focusColor="focus:ring-gray-500" // Add focusColor prop
+        onClick={closeModal}
+      />
+    </div>
+  </form>
+</Modal>
 
-      {/* Delete Confirmation Modal */}
-      <Modal open={isDeleteModalOpen} onClose={closeDeleteModal}>
-        <p className="text-gray-100">Are you sure you want to delete this about entry?</p>
-        <div className="mt-4 space-x-1">
-          <Button
-            text="Yes"
-            bgColor="bg-red-600"
-            hoverColor="hover:bg-red-700"
-            focusColor="focus:ring-red-500" // Add focusColor prop
-            onClick={handleDelete}
-          />
-          <Button
-            text="No"
-            bgColor="bg-gray-500"
-            hoverColor="hover:bg-gray-600"
-            focusColor="focus:ring-gray-500" // Add focusColor prop
-            onClick={closeDeleteModal}
-          />
-        </div>
-      </Modal>
+{/* Delete Confirmation Modal */}
+<Modal isOpen={isDeleteModalOpen} onClose={closeDeleteModal}>
+  <p className="text-gray-100">Are you sure you want to delete this about entry?</p>
+  <div className="mt-4 space-x-1">
+    <Button
+      text="Yes"
+      bgColor="bg-red-600"
+      hoverColor="hover:bg-red-700"
+      focusColor="focus:ring-red-500" // Add focusColor prop
+      onClick={handleDelete}
+    />
+    <Button
+      text="No"
+      bgColor="bg-gray-500"
+      hoverColor="hover:bg-gray-600"
+      focusColor="focus:ring-gray-500" // Add focusColor prop
+      onClick={closeDeleteModal}
+    />
+  </div>
+</Modal>
+
     </div>
   );
 };
