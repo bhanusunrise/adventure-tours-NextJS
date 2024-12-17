@@ -70,6 +70,10 @@ export async function PUT(req: NextRequest) {
       );
     }
 
+    // Clear existing activities and locations for the package
+    await connection.query('DELETE FROM package_activities WHERE package_id = ?', [id]);
+    await connection.query('DELETE FROM package_locations WHERE package_id = ?', [id]);
+
     // Update activities in Package_Activities table
     const activityList = JSON.parse(activities); // Parse activities JSON string to an array
     for (const activity of activityList) {

@@ -43,20 +43,23 @@ export async function DELETE(req: NextRequest) {
     // Get the image link from the result
     const imageLink = result[0].image_link;
 
-    // Remove the image file from the server
-    const filePath = path.join(process.cwd(), 'public', imageLink);
-    try {
-      await fs.unlink(filePath); // Delete the image file
-    } catch (error) {
-      console.error('Error deleting image file:', error);
+    // Remove the image file from the server if it exists
+    if (imageLink) {
+      const filePath = path.join(process.cwd(), 'public', imageLink);
+      try {
+        await fs.unlink(filePath); // Delete the image file
+        console.log(`Image deleted: ${filePath}`);
+      } catch (error) {
+        console.error('Error deleting image file:', error);
+      }
     }
-
-    // Delete the package record from the database
-    await connection.query('DELETE FROM packages WHERE id = ?', [id]);
 
     // Delete related entries from Package_Activities and Package_Locations tables
     await connection.query('DELETE FROM package_activities WHERE package_id = ?', [id]);
     await connection.query('DELETE FROM package_locations WHERE package_id = ?', [id]);
+
+    // Delete the package record from the packages table
+    await connection.query('DELETE FROM packages WHERE id = ?', [id]);
 
     return new Response(
       JSON.stringify({ message: 'Package entry and related data deleted successfully' }),

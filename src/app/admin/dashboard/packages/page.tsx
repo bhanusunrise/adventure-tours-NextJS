@@ -1,11 +1,11 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Input from '@/app/components/form/input';
 import Button from '@/app/components/form/button';
 import Label from '@/app/components/form/label';
 import Textarea from '@/app/components/form/textarea';
-import { Table, TableRow, TableHead } from '@/app/components/table';
+import { Table, TableRow, TableHead, TableCell, TableBody } from '@/app/components/table';
 import ToastNotification from '@/app/components/toast_notification';
 
 const PackagesPage = () => {
@@ -15,54 +15,25 @@ const PackagesPage = () => {
   const [activityInput, setActivityInput] = useState('');
   const [locationToasts, setLocationToasts] = useState<string[]>([]);
   const [activityToasts, setActivityToasts] = useState<string[]>([]);
+  const [packages, setPackages] = useState<any[]>([]); // State to store package data
 
-  // Handle location input change
-  const handleLocationChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const value = e.target.value;
+  // Fetch packages from the API on component mount
+  useEffect(() => {
+    const fetchPackages = async () => {
+      try {
+        const response = await fetch('/api/packages/get_all_packages');
+        if (!response.ok) {
+          throw new Error('Failed to fetch packages');
+        }
+        const data = await response.json();
+        setPackages(data.packages);
+      } catch (error) {
+        console.error('Error fetching packages:', error);
+      }
+    };
 
-    // Check if the input contains a '/' (signifying the end of a location entry)
-    if (value.includes('/')) {
-      // Split the value by '/' and take the valid parts as new locations
-      const newLocations = value
-        .split('/')
-        .map((loc) => loc.trim())
-        .filter((loc) => loc);
-
-      // Update locations and location toasts with the new entries
-      setLocations((prevLocations) => [...prevLocations, ...newLocations]);
-      setLocationToasts((prevToasts) => [...prevToasts, ...newLocations]);
-
-      // Clear the input field after adding locations
-      setLocationInput('');
-    } else {
-      // Update the input field normally if '/' is not detected
-      setLocationInput(value);
-    }
-  };
-
-  // Handle activity input change
-  const handleActivityChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const value = e.target.value;
-
-    // Check if the input contains a '/' (signifying the end of an activity entry)
-    if (value.includes('/')) {
-      // Split the value by '/' and take the valid parts as new activities
-      const newActivities = value
-        .split('/')
-        .map((act) => act.trim())
-        .filter((act) => act);
-
-      // Update activities and activity toasts with the new entries
-      setActivities((prevActivities) => [...prevActivities, ...newActivities]);
-      setActivityToasts((prevToasts) => [...prevToasts, ...newActivities]);
-
-      // Clear the input field after adding activities
-      setActivityInput('');
-    } else {
-      // Update the input field normally if '/' is not detected
-      setActivityInput(value);
-    }
-  };
+    fetchPackages();
+  }, []);
 
   function handleAddPackage(): void {
     console.log('Activities:', activities);
@@ -142,7 +113,7 @@ const PackagesPage = () => {
                 required
                 className="mt-1"
                 value={locationInput}
-                onChange={handleLocationChange}
+                onChange={(e) => setLocationInput(e.target.value)}
               />
             </div>
 
@@ -166,7 +137,7 @@ const PackagesPage = () => {
                 required
                 className="mt-1"
                 value={activityInput}
-                onChange={handleActivityChange}
+                onChange={(e) => setActivityInput(e.target.value)}
               />
             </div>
 
@@ -199,7 +170,7 @@ const PackagesPage = () => {
 
         {/* Right Section (3/4) */}
         <div className="w-full md:w-3/4 bg-gray-100 p-6 rounded-lg shadow-md dark:bg-gray-800">
-          <p className="text-xl text-gray-100">Packages</p>
+          <p className="text-xl text-gray-100 mb-4">Packages</p>
           <Table>
             <TableRow className="text-gray-100 font-bold">
               <TableHead>#</TableHead>
@@ -208,11 +179,27 @@ const PackagesPage = () => {
               <TableHead>Price</TableHead>
               <TableHead>Image</TableHead>
               <TableHead>Description</TableHead>
-              <TableHead>Locations</TableHead>
-              <TableHead>Activities</TableHead>
               <TableHead>Order</TableHead>
-              <TableHead>Action</TableHead>
             </TableRow>
+            <TableBody>
+              {packages.map((pkg, index) => (
+                <TableRow key={pkg.id}>
+                  <TableCell>{index + 1}</TableCell>
+                  <TableCell>{pkg.id}</TableCell>
+                  <TableCell>{pkg.name}</TableCell>
+                  <TableCell>{pkg.price}</TableCell>
+                  <TableCell>
+                    <img
+                      src={pkg.image_link}
+                      alt={pkg.name}
+                      className="w-16 h-16 object-cover"
+                    />
+                  </TableCell>
+                  <TableCell>{pkg.description}</TableCell>
+                  <TableCell>{pkg.index}</TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
           </Table>
         </div>
       </div>
