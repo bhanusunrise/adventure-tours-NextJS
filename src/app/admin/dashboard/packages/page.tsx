@@ -8,6 +8,16 @@ import Textarea from '@/app/components/form/textarea';
 import { Table, TableRow, TableHead, TableCell, TableBody } from '@/app/components/table';
 import ToastNotification from '@/app/components/toast_notification';
 
+// Define the type for package data
+interface Package {
+  id: string;
+  name: string;
+  price: number;
+  image_link: string;
+  description: string;
+  index?: number; // Optional field if index is used
+}
+
 const PackagesPage = () => {
   const [locations, setLocations] = useState<string[]>([]);
   const [activities, setActivities] = useState<string[]>([]);
@@ -15,7 +25,7 @@ const PackagesPage = () => {
   const [activityInput, setActivityInput] = useState('');
   const [locationToasts, setLocationToasts] = useState<string[]>([]);
   const [activityToasts, setActivityToasts] = useState<string[]>([]);
-  const [packages, setPackages] = useState<any[]>([]); // State to store package data
+  const [packages, setPackages] = useState<Package[]>([]); // State to store package data
 
   // Fetch packages from the API on component mount
   useEffect(() => {
