@@ -40,6 +40,7 @@ export default function Home() {
     { imageUrl: "./uploads/up_1008.jpg", name: "Hidden Waterfalls" },
   ];
 
+  {/*
   const packages = [
   {
     packageName: "Tropical Paradise Getaway",
@@ -101,7 +102,7 @@ export default function Home() {
     location: ['Colombo', 'Galle', 'Kandy', 'Jaffna'],
     activities: ['Snorkeling', 'Surfing', 'Beach Volleyball', 'Sunbathing']
   },
-];
+];*/}
 
   function handleCallNowClick(): void {
   window.location.href = "tel:+94762278270";
