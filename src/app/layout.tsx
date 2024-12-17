@@ -1,5 +1,5 @@
 import './globals.css';
-import './favicon.ico'
+import '../../public/logo.png';
 
 export default function RootLayout({
   children,
@@ -10,7 +10,7 @@ export default function RootLayout({
     <html lang="en">
       <head>
         <title>Adventure Tours</title>
-         <link rel="icon" href="./favicon.ico" />
+         <link rel="icon" href="./logo.png" />
       </head>
       <body>{children}</body>
     </html>
