@@ -53,7 +53,7 @@ export async function POST(req: NextRequest) {
 
     // Insert record into the Packages table
     const imageLink = `/uploads/packages/${newFileName}`;
-    const [rows] = await connection.execute(
+    await connection.execute(
       'INSERT INTO packages (id, name, price, `index`, image_link, description) VALUES (?, ?, ?, ?, ?, ?)',
       [`PACK_${nextNumber}`, name, price, index, imageLink, description]
     );
