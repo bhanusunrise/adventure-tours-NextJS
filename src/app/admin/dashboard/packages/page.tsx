@@ -64,6 +64,11 @@ const PackagesPage = () => {
     }
   };
 
+  function handleAddPackage(): void {
+    console.log('Activities:', activities);
+    console.log('Locations:', locations);
+  }
+
   return (
     <div className="p-6">
       {/* Title */}
@@ -172,6 +177,7 @@ const PackagesPage = () => {
                 bgColor="bg-blue-600"
                 hoverColor="hover:bg-blue-700"
                 focusColor="focus:ring-blue-300"
+                onClick={handleAddPackage}
               />
               <Button
                 text="Reset"
