@@ -8,7 +8,7 @@ import Destination from "./components/destination"; // Import Destination Compon
 import Footer from "./components/footer";
 import Heading from "./components/heading";
 import NavBar from "./components/navbar";
-import Package from "./components/package";
+//import Package from "./components/package";
 import SubHeading from "./components/sub_heading";
 
 export default function Home() {
