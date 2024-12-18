@@ -84,7 +84,7 @@ export default function NavBar() {
         'transition-all duration-500 ease-in-out' // Adding transition for smooth background color change
       )}
     >
-      <div className="mx-auto px-20 sm:px-4 lg:px-20 pt-1 pb-1">
+      <div className="mx-auto px-4 sm:px-6 lg:px-20 pt-1 pb-1"> {/* Reduced padding for smaller devices (px-4 and px-6 for sm and lg respectively) */}
         <div className="relative flex h-20 items-center justify-between">
           <div className="flex items-center">
             <img alt="Your Company" src="./logo.png" className="h-14 w-auto" />
