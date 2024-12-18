@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useEffect, useState } from 'react';
 import AboutComponent from './components/about_component';
 import Button from './components/button';
 //import ContactSection from './components/contact';
