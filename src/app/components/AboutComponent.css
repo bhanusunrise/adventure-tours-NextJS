@@ -27,3 +27,23 @@
     object-fit: contain; /* Display the entire image */
   }
 }
+
+/* AboutComponent.css */
+
+/* Initial fade-out state */
+.fade-out {
+  opacity: 0;
+  transform: translateY(50px); /* Move element down initially */
+}
+
+/* Fade-in when visible */
+.fade-in {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Smooth transition */
+.fade-in,
+.fade-out {
+  transition: opacity 0.7s ease-out, transform 0.7s ease-out;
+}

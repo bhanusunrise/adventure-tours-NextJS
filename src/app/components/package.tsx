@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { FaMapMarkerAlt, FaUmbrellaBeach } from 'react-icons/fa'; // Location and Activity Icons
 
 interface PackageProps {
@@ -20,6 +20,30 @@ const Package: React.FC<PackageProps> = ({
   locations,
   activities,
 }) => {
+  const [isVisible, setIsVisible] = useState(false);
+  const ref = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          setIsVisible(entry.isIntersecting);
+        });
+      },
+      { threshold: 0.1 }
+    );
+
+    if (ref.current) {
+      observer.observe(ref.current);
+    }
+
+    return () => {
+      if (ref.current) {
+        observer.unobserve(ref.current);
+      }
+    };
+  }, []);
+
   const formatPrice = () => {
     if (priceLimit === 'equal') {
       return `${price} LKR`;
@@ -31,7 +55,12 @@ const Package: React.FC<PackageProps> = ({
   };
 
   return (
-    <div className="rounded-xl shadow-xl overflow-hidden bg-yellow-100 border border-gray-200 pb-6">
+    <div
+      ref={ref}
+      className={`rounded-xl shadow-xl overflow-hidden bg-yellow-100 border border-gray-200 pb-6 transition-all duration-500 ease-in-out ${
+        isVisible ? "fade-in" : "fade-out"
+      }`}
+    >
       {/* Package Name and Price */}
       <div className="p-6">
         <h2 className="text-xl font-bold text-gray-800 text-center">{packageName}</h2>
@@ -41,7 +70,7 @@ const Package: React.FC<PackageProps> = ({
       {/* Image */}
       <div className="pr-0 pl-0">
         <div
-          className="h-48 w-full bg-cover bg-center "
+          className="h-48 w-full bg-cover bg-center"
           style={{
             backgroundImage: `url(${imageUrl})`,
             backgroundSize: 'cover',
@@ -84,3 +113,4 @@ const Package: React.FC<PackageProps> = ({
 };
 
 export default Package;
+

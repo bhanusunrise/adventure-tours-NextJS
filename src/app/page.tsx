@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import AboutComponent from './components/about_component';
 import Button from './components/button';
 //import ContactSection from './components/contact';
@@ -13,9 +13,13 @@ import Spinner from './components/spinner';
 import SubHeading from './components/sub_heading';
 import ContactSection from './components/contact';
 import Destination from './components/destination';
+import Map from './components/map';
 
 export default function Home() {
   const [isLoading, setIsLoading] = useState(true);
+  const logoRef = useRef<HTMLImageElement>(null);
+  const textRef = useRef<HTMLDivElement>(null);
+  const [isVisible, setIsVisible] = useState(false);
 
   const imageUrls = [
     './uploads/up_1000.jpg',
@@ -64,6 +68,11 @@ export default function Home() {
   if (isLoading) {
     return <Spinner />;
   }
+
+  
+
+
+  
 
   const paragraphTexts = [
     'We are a team of passionate individuals committed to delivering excellence. Our mission is to create innovative solutions and provide outstanding service to our clients. Join us in our journey!',
@@ -177,15 +186,8 @@ export default function Home() {
 
           <div className="col col-span-3">
             <div className="m-10"></div>
-           <iframe 
-  src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3960.269392066728!2d80.7640419!3d6.9775079!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3ae3817dd8000e6f%3A0x511d2aeb3484e3ef!2sArun%20Home%20Decor!5e0!3m2!1sen!2slk!4v1733515033206!5m2!1sen!2slk"
-  style={{ border: 0, width: "100%", height: "100%" }}
-  allowFullScreen
-  loading="lazy"
-  referrerPolicy="no-referrer-when-downgrade"
-></iframe>
-
-              <div className="m-48"></div>
+            <Map/>
+            <div className="m-48"></div>
           </div>
           <div
   className="col col-span-2 bg-yellow-300 rounded-2xl pl-4 pr-4 shadow-2xl md:mx-auto mt-20 mx-4"

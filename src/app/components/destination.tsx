@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useRef, useState } from "react";
 
 interface DestinationProps {
   imageUrl: string;
@@ -6,9 +6,36 @@ interface DestinationProps {
 }
 
 const Destination: React.FC<DestinationProps> = ({ imageUrl, name }) => {
+  const [isVisible, setIsVisible] = useState(false);
+  const ref = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          setIsVisible(entry.isIntersecting);
+        });
+      },
+      { threshold: 0.1 }
+    );
+
+    if (ref.current) {
+      observer.observe(ref.current);
+    }
+
+    return () => {
+      if (ref.current) {
+        observer.unobserve(ref.current);
+      }
+    };
+  }, []);
+
   return (
     <div
-      className="relative w-full h-64 rounded-xl overflow-hidden shadow-2xl group"
+      ref={ref}
+      className={`relative w-full h-64 rounded-xl overflow-hidden shadow-2xl group transition-all duration-500 ease-in-out ${
+        isVisible ? "fade-in" : "fade-out"
+      }`}
       style={{
         backgroundImage: `url(${imageUrl})`,
         backgroundSize: 'cover',

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { FaPhone, FaEnvelope, FaMapMarkerAlt } from 'react-icons/fa'; // Icons for contact types
 
 interface ContactSectionProps {
@@ -7,6 +7,31 @@ interface ContactSectionProps {
 }
 
 const ContactSection: React.FC<ContactSectionProps> = ({ contactType, description }) => {
+  const [isVisible, setIsVisible] = useState(false);
+  const ref = useRef<HTMLDivElement>(null);
+
+  // Observe the visibility of the component
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          setIsVisible(entry.isIntersecting);
+        });
+      },
+      { threshold: 0.1 }
+    );
+
+    if (ref.current) {
+      observer.observe(ref.current);
+    }
+
+    return () => {
+      if (ref.current) {
+        observer.unobserve(ref.current);
+      }
+    };
+  }, []);
+
   // Determine the icon and link based on contact type
   const getContactDetails = () => {
     switch (contactType) {
@@ -38,7 +63,12 @@ const ContactSection: React.FC<ContactSectionProps> = ({ contactType, descriptio
   if (!contactDetails) return null;
 
   return (
-    <div className="flex items-center gap-4 p-4">
+    <div
+      ref={ref}
+      className={`flex items-center gap-4 p-4 transition-all duration-500 ease-in-out ${
+        isVisible ? 'fade-in' : 'fade-out'
+      }`}
+    >
       {/* Icon */}
       <div className="text-2xl">{contactDetails.icon}</div>
       {/* Text */}
