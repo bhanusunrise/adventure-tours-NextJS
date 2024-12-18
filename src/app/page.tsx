@@ -109,8 +109,8 @@ export default function Home() {
     </div>
     <div className="text-4xl sm:text-6xl md:text-7xl">with Adventures</div>
     <Button
-      text="Call Now"
-      color="red"
+      text="📱 Call Now"
+      color="yellow"
       className="mt-10 px-10 py-2 text-2xl sm:text-xl md:text-2xl"
       onClick={handleCallNowClick}
     />
