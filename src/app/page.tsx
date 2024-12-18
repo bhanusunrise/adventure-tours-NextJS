@@ -99,18 +99,24 @@ export default function Home() {
         <NavBar />
       </div>
 
-      {/* Hero Section */}
-      <div className="h-screen bg-home-bg" id="home">
-        <div className="h-full sm:h-1/2 md:h-full flex flex-col items-center justify-center text-center font-semibold text-white">
-          <img src="/logo.png" alt="Logo" className="sm:hidden h-40 w-auto mb-8" />
+     {/* Hero Section */}
+<div className="relative h-screen bg-home-bg" id="home">
+  <div className="h-full sm:h-1/2 md:h-full flex flex-col items-center justify-center text-center font-semibold text-white">
+    <img src="/logo.png" alt="Logo" className="sm:hidden h-40 w-auto mb-8" />
 
-          <div className="text-4xl sm:text-5xl md:text-7xl">
-            Capture Your <span style={{ color: 'yellow' }}>Memories</span>
-          </div>
-          <div className="text-4xl sm:text-6xl md:text-7xl">with Adventures</div>
-          <Button text="Call Now" color="red" className="mt-10 px-10 py-2 text-2xl sm:text-xl md:text-2xl" onClick={handleCallNowClick} />
-        </div>
-      </div>
+    <div className="text-4xl sm:text-5xl md:text-7xl">
+      Capture Your <span style={{ color: 'yellow' }}>Memories</span>
+    </div>
+    <div className="text-4xl sm:text-6xl md:text-7xl">with Adventures</div>
+    <Button
+      text="Call Now"
+      color="red"
+      className="mt-10 px-10 py-2 text-2xl sm:text-xl md:text-2xl"
+      onClick={handleCallNowClick}
+    />
+  </div>
+</div>
+
 
       <div className="md:h-40 sm:h-10"></div>
 
@@ -126,9 +132,19 @@ export default function Home() {
           <AboutComponent key={index} imageUrl={imageUrl} paragraphText={paragraphTexts[index % paragraphTexts.length]} image_side={index % 2 === 0 ? 'left' : 'right'} />
         ))}
       </div>
+      
 
        {/* Take a Ride Section */}
-      <div className="bg-gray-100 md:mt-72 md:mb-72 mt-20 mb-20 md:pl-36 md:pr-36 pl-8 pr-8 pt-36 pb-36" id="ride">
+       <div className="bg-white">
+         <div className="relative top-0 left-0 w-full overflow-hidden leading-none">
+    <svg viewBox="0 0 1200 120" preserveAspectRatio="none" className="w-full h-full">
+      <path
+        d="M0,60 C300,120 900,0 1200,60 L1200,120 L0,120 Z"
+        className="fill-gray-100"
+      ></path>
+    </svg>
+  </div>
+      <div className="bg-gray-100 md:mt-0 md:mb-72 mt-0 mb-20 md:pl-36 md:pr-36 pl-8 pr-8 pt-36 pb-36" id="ride">
         <Heading text="Wanna go a ride?" color="text-gray-600" />
         <div className="h-40"></div>
         <SubHeading text="Destinations" color="text-gray-600" />
@@ -153,6 +169,7 @@ export default function Home() {
           color="text-gray-600"
         />
         <div className="m-10"></div>
+
         {/* Packages Grid */}
         {/*}
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -169,8 +186,11 @@ export default function Home() {
                 />
               ))}
             </div>*/}
-      </div>
 
+            {/* Curved SVG */}
+
+  </div>
+</div>
 
 
       <div className="md:h-40 h-0"></div>
