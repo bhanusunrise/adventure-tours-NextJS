@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Input from '@/app/components/form/input';
 import Button from '@/app/components/form/button';
 import Label from '@/app/components/form/label';
@@ -22,6 +22,9 @@ const PackagesPage = () => {
   const [file, setFile] = useState<File | null>(null);
 
   const [toastMessage, setToastMessage] = useState<string | null>(null);
+
+  const [packages, setPackages] = useState<any[]>([]);
+
 
   // Handle location input change
   const handleLocationChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -99,6 +102,26 @@ const PackagesPage = () => {
       setToastMessage('An unexpected error occurred.');
     }
   };
+
+
+  useEffect(() => {
+  const fetchPackages = async () => {
+    try {
+      const response = await fetch('/api/packages/get_all_packages');
+      if (response.ok) {
+        const data = await response.json();
+        setPackages(data.packages);
+      } else {
+        setToastMessage('Failed to load packages.');
+      }
+    } catch (error) {
+      console.error('Error:', error);
+      setToastMessage('An unexpected error occurred while fetching packages.');
+    }
+  };
+
+  fetchPackages();
+}, []);
 
   return (
     <div className="p-6">
@@ -242,7 +265,37 @@ const PackagesPage = () => {
         <div className="w-full md:w-3/4 bg-gray-100 p-6 rounded-lg shadow-md dark:bg-gray-800">
           <p className="text-xl font-medium text-gray-700 dark:text-gray-100">All Packages</p>
           <br />
-        
+          <Table>
+  <TableRow className="text-gray-100 font-bold">
+    <TableHead>#</TableHead>
+    <TableHead>Name</TableHead>
+    <TableHead>Price</TableHead>
+    <TableHead>Image</TableHead>
+    <TableHead>Description</TableHead>
+    <TableHead>Locations</TableHead>
+    <TableHead>Activities</TableHead>
+    <TableHead>Actions</TableHead>
+  </TableRow>
+  {packages.map((pkg, index) => (
+    <TableRow key={pkg.id} className='text-gray-100'>
+      <TableHead>{index + 1}</TableHead>
+      <TableHead>{pkg.name}</TableHead>
+      <TableHead>{pkg.price}</TableHead>
+      <TableHead>
+        <img src={pkg.image_link} alt={pkg.name} className="h-12 w-12 object-cover" />
+      </TableHead>
+      <TableHead>{pkg.description}</TableHead>
+      <TableHead>
+        {pkg.locations.map((loc) => loc.name).join(', ')}
+      </TableHead>
+      <TableHead>
+        {pkg.activities.map((act) => act.name).join(', ')}
+      </TableHead>
+      <TableHead>—</TableHead> {/* Placeholder for future actions */}
+    </TableRow>
+  ))}
+</Table>
+
         </div>
       </div>
     </div>

@@ -5,7 +5,7 @@ export async function GET() {
   try {
     const connection = await dbConnect(); // Connect to the database
 
-    // Fetch packages along with activities and locations using JOINs
+    // Fetch packages along with activities and locations (including their IDs) using JOINs
     const [packages] = await connection.query<RowDataPacket[]>(
       `
       SELECT 
@@ -15,8 +15,8 @@ export async function GET() {
         p.image_link, 
         p.\`index\`, 
         p.description,
-        GROUP_CONCAT(DISTINCT pl.name) AS locations,
-        GROUP_CONCAT(DISTINCT pa.name) AS activities
+        GROUP_CONCAT(DISTINCT CONCAT(pl.id, ':', pl.name)) AS locations,
+        GROUP_CONCAT(DISTINCT CONCAT(pa.id, ':', pa.name)) AS activities
       FROM 
         packages p
       LEFT JOIN 
@@ -30,11 +30,21 @@ export async function GET() {
       `
     );
 
-    // Transform the results to split `locations` and `activities` into arrays
+    // Transform the results to split `locations` and `activities` into arrays of objects with id and name
     const result = packages.map((pkg) => ({
       ...pkg,
-      locations: pkg.locations ? pkg.locations.split(',') : [],
-      activities: pkg.activities ? pkg.activities.split(',') : [],
+      locations: pkg.locations
+        ? pkg.locations.split(',').map((loc) => {
+            const [id, name] = loc.split(':');
+            return { id, name };
+          })
+        : [],
+      activities: pkg.activities
+        ? pkg.activities.split(',').map((act) => {
+            const [id, name] = act.split(':');
+            return { id, name };
+          })
+        : [],
     }));
 
     // Return the rows as a JSON response
