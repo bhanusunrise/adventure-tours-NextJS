@@ -1,22 +1,12 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import Input from '@/app/components/form/input';
 import Button from '@/app/components/form/button';
 import Label from '@/app/components/form/label';
 import Textarea from '@/app/components/form/textarea';
-import { Table, TableRow, TableHead, TableCell, TableBody } from '@/app/components/table';
+import { Table, TableRow, TableHead } from '@/app/components/table';
 import ToastNotification from '@/app/components/toast_notification';
-
-// Define the type for package data
-interface Package {
-  id: string;
-  name: string;
-  price: number;
-  image_link: string;
-  description: string;
-  index?: number; // Optional field if index is used
-}
 
 const PackagesPage = () => {
   const [locations, setLocations] = useState<string[]>([]);
@@ -25,45 +15,107 @@ const PackagesPage = () => {
   const [activityInput, setActivityInput] = useState('');
   const [locationToasts, setLocationToasts] = useState<string[]>([]);
   const [activityToasts, setActivityToasts] = useState<string[]>([]);
-  const [packages, setPackages] = useState<Package[]>([]); // State to store package data
 
-  // Fetch packages from the API on component mount
-  useEffect(() => {
-    const fetchPackages = async () => {
-      try {
-        const response = await fetch('/api/packages/get_all_packages');
-        if (!response.ok) {
-          throw new Error('Failed to fetch packages');
-        }
+  const [packageName, setPackageName] = useState('');
+  const [price, setPrice] = useState('');
+  const [description, setDescription] = useState('');
+  const [file, setFile] = useState<File | null>(null);
+
+  const [toastMessage, setToastMessage] = useState<string | null>(null);
+
+  // Handle location input change
+  const handleLocationChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value;
+    if (value.includes('/')) {
+      const newLocations = value
+        .split('/')
+        .map((loc) => loc.trim())
+        .filter((loc) => loc);
+      setLocations((prevLocations) => [...prevLocations, ...newLocations]);
+      setLocationToasts((prevToasts) => [...prevToasts, ...newLocations]);
+      setLocationInput('');
+    } else {
+      setLocationInput(value);
+    }
+  };
+
+  // Handle activity input change
+  const handleActivityChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value;
+    if (value.includes('/')) {
+      const newActivities = value
+        .split('/')
+        .map((act) => act.trim())
+        .filter((act) => act);
+      setActivities((prevActivities) => [...prevActivities, ...newActivities]);
+      setActivityToasts((prevToasts) => [...prevToasts, ...newActivities]);
+      setActivityInput('');
+    } else {
+      setActivityInput(value);
+    }
+  };
+
+  // Handle package addition
+  const handleAddPackage = async (e: React.FormEvent) => {
+    e.preventDefault();
+
+    if (!packageName || !price || !description || !file || locations.length === 0 || activities.length === 0) {
+      setToastMessage('All fields are required.');
+      return;
+    }
+
+    const formData = new FormData();
+    formData.append('name', packageName);
+    formData.append('price', price);
+    formData.append('index', '1'); // You can dynamically set this if needed
+    formData.append('description', description);
+    formData.append('file', file);
+    formData.append('activities', JSON.stringify(activities));
+    formData.append('locations', JSON.stringify(locations));
+
+    try {
+      const response = await fetch('/api/packages/add_package', {
+        method: 'POST',
+        body: formData,
+      });
+
+      if (response.ok) {
+        setToastMessage('Package added successfully!');
+        // Reset form fields
+        setPackageName('');
+        setPrice('');
+        setDescription('');
+        setFile(null);
+        setLocations([]);
+        setActivities([]);
+        setLocationToasts([]);
+        setActivityToasts([]);
+      } else {
         const data = await response.json();
-        setPackages(data.packages);
-      } catch (error) {
-        console.error('Error fetching packages:', error);
+        setToastMessage(data.error || 'Error adding package.');
       }
-    };
-
-    fetchPackages();
-  }, []);
-
-  function handleAddPackage(): void {
-    console.log('Activities:', activities);
-    console.log('Locations:', locations);
-  }
+    } catch (error) {
+      console.error('Error:', error);
+      setToastMessage('An unexpected error occurred.');
+    }
+  };
 
   return (
     <div className="p-6">
-      {/* Title */}
       <p className="text-4xl font-semibold text-gray-100">Packages</p>
 
+      {toastMessage && (
+        <ToastNotification
+          message={toastMessage}
+          onClose={() => setToastMessage(null)}
+        />
+      )}
+
       <div className="mt-10 flex flex-col md:flex-row gap-8">
-        {/* Left Section (1/4) */}
         <div className="w-full md:w-1/4 bg-gray-100 p-6 rounded-lg shadow-md dark:bg-gray-800">
-          <p className="text-xl font-medium text-gray-700 dark:text-gray-100">
-            Add Package
-          </p>
+          <p className="text-xl font-medium text-gray-700 dark:text-gray-100">Add Package</p>
           <br />
-          <form>
-            {/* Package Name */}
+          <form onSubmit={handleAddPackage}>
             <div className="mb-6">
               <Label text="Package Name" htmlFor="package-name" />
               <Input
@@ -71,10 +123,11 @@ const PackagesPage = () => {
                 placeholder="Enter package name"
                 required
                 className="mt-1"
+                value={packageName}
+                onChange={(e) => setPackageName(e.target.value)}
               />
             </div>
 
-            {/* Price */}
             <div className="mb-6">
               <Label text="Price" htmlFor="price" />
               <Input
@@ -83,16 +136,22 @@ const PackagesPage = () => {
                 required
                 min={0}
                 className="mt-1"
+                value={price}
+                onChange={(e) => setPrice(e.target.value)}
               />
             </div>
 
-            {/* Image Upload */}
             <div className="mb-6">
               <Label text="Upload Image" htmlFor="image-upload" />
-              <Input type="file" required className="mt-1" accept="image/*" />
+              <Input
+                type="file"
+                required
+                className="mt-1"
+                accept="image/*"
+                onChange={(e) => setFile(e.target.files?.[0] || null)}
+              />
             </div>
 
-            {/* Description */}
             <div className="mb-6">
               <Label text="Description" htmlFor="description" />
               <Textarea
@@ -100,16 +159,17 @@ const PackagesPage = () => {
                 rows={4}
                 required
                 className="mt-1"
+                value={description}
+                onChange={(e) => setDescription(e.target.value)}
               />
             </div>
 
-            {/* Locations */}
             <div className="mb-6 relative">
               <Label text="Locations" htmlFor="locations" />
               {locationToasts.map((location, index) => (
                 <ToastNotification
                   key={index}
-                  message={location}
+                  message={"📍 " + location}
                   onClose={() =>
                     setLocationToasts((prevToasts) =>
                       prevToasts.filter((_, i) => i !== index)
@@ -120,20 +180,19 @@ const PackagesPage = () => {
               <Input
                 type="text"
                 placeholder="Enter locations separated by '/'"
-                required
+
                 className="mt-1"
                 value={locationInput}
-                onChange={(e) => setLocationInput(e.target.value)}
+                onChange={handleLocationChange}
               />
             </div>
 
-            {/* Activities */}
             <div className="mb-6 relative">
               <Label text="Activities" htmlFor="activities" />
               {activityToasts.map((activity, index) => (
                 <ToastNotification
                   key={index}
-                  message={activity}
+                  message={"✅ " + activity}
                   onClose={() =>
                     setActivityToasts((prevToasts) =>
                       prevToasts.filter((_, i) => i !== index)
@@ -144,21 +203,20 @@ const PackagesPage = () => {
               <Input
                 type="text"
                 placeholder="Enter activities separated by '/'"
-                required
+
                 className="mt-1"
                 value={activityInput}
-                onChange={(e) => setActivityInput(e.target.value)}
+                onChange={handleActivityChange}
               />
             </div>
 
-            {/* Buttons */}
             <div className="flex gap-2">
               <Button
                 text="Add"
                 bgColor="bg-blue-600"
                 hoverColor="hover:bg-blue-700"
                 focusColor="focus:ring-blue-300"
-                onClick={handleAddPackage}
+                type="submit"
               />
               <Button
                 text="Reset"
@@ -166,6 +224,10 @@ const PackagesPage = () => {
                 hoverColor="hover:bg-gray-600"
                 focusColor="focus:ring-gray-300"
                 onClick={() => {
+                  setPackageName('');
+                  setPrice('');
+                  setDescription('');
+                  setFile(null);
                   setLocationInput('');
                   setActivityInput('');
                   setLocations([]);
@@ -177,40 +239,10 @@ const PackagesPage = () => {
             </div>
           </form>
         </div>
-
-        {/* Right Section (3/4) */}
         <div className="w-full md:w-3/4 bg-gray-100 p-6 rounded-lg shadow-md dark:bg-gray-800">
-          <p className="text-xl text-gray-100 mb-4">Packages</p>
-          <Table>
-            <TableRow className="text-gray-100 font-bold">
-              <TableHead>#</TableHead>
-              <TableHead>ID</TableHead>
-              <TableHead>Name</TableHead>
-              <TableHead>Price</TableHead>
-              <TableHead>Image</TableHead>
-              <TableHead>Description</TableHead>
-              <TableHead>Order</TableHead>
-            </TableRow>
-            <TableBody>
-              {packages.map((pkg, index) => (
-                <TableRow key={pkg.id}>
-                  <TableCell>{index + 1}</TableCell>
-                  <TableCell>{pkg.id}</TableCell>
-                  <TableCell>{pkg.name}</TableCell>
-                  <TableCell>{pkg.price}</TableCell>
-                  <TableCell>
-                    <img
-                      src={pkg.image_link}
-                      alt={pkg.name}
-                      className="w-16 h-16 object-cover"
-                    />
-                  </TableCell>
-                  <TableCell>{pkg.description}</TableCell>
-                  <TableCell>{pkg.index}</TableCell>
-                </TableRow>
-              ))}
-            </TableBody>
-          </Table>
+          <p className="text-xl font-medium text-gray-700 dark:text-gray-100">All Packages</p>
+          <br />
+        
         </div>
       </div>
     </div>

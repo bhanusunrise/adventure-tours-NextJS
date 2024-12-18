@@ -29,22 +29,16 @@ export async function POST(req: NextRequest) {
     // Ensure the upload directory exists
     await fs.mkdir(uploadDir, { recursive: true });
 
-    // Get the latest file number for renaming
-    const files = await fs.readdir(uploadDir);
-    const packageFiles = files.filter(f => /^PACK_\d{5}\.(jpg|jpeg|png|gif)$/.test(f));
-    let nextNumber = 10000;
+    // Get the latest package number for generating the new package ID
+    const [packageRows] = await connection.execute(
+      "SELECT MAX(CAST(SUBSTRING(id, 6) AS UNSIGNED)) AS maxId FROM packages"
+    );
+    let nextPackageNumber = (packageRows as { maxId: number }[])[0]?.maxId ?? 10000;
+    nextPackageNumber += 1;
 
-    if (packageFiles.length > 0) {
-      const latestFile = packageFiles.sort().pop(); // Get the last file
-      if (latestFile) {
-        const latestNumber = parseInt(latestFile.match(/\d{5}/)?.[0] || '10000');
-        nextNumber = latestNumber + 1;
-      }
-    }
-
-    // Set the new file name
+    // Set the new package file name
     const extension = file.name.split('.').pop();
-    const newFileName = `PACK_${nextNumber.toString().padStart(5, '0')}.${extension}`;
+    const newFileName = `PACK_${nextPackageNumber.toString().padStart(5, '0')}.${extension}`;
 
     // Save the file to the upload directory
     const filePath = path.join(uploadDir, newFileName);
@@ -53,27 +47,42 @@ export async function POST(req: NextRequest) {
 
     // Insert record into the Packages table
     const imageLink = `/uploads/packages/${newFileName}`;
+    const packageId = `PACK_${nextPackageNumber}`;
+
     await connection.execute(
       'INSERT INTO packages (id, name, price, `index`, image_link, description) VALUES (?, ?, ?, ?, ?, ?)',
-      [`PACK_${nextNumber}`, name, price, index, imageLink, description]
+      [packageId, name, price, index, imageLink, description]
     );
 
     // Insert activities into Package_Activities table
-    const packageId = `PACK_${nextNumber}`;
     const activityList = JSON.parse(activities); // Parse activities JSON string to an array
+    const [activityRows] = await connection.execute(
+      "SELECT MAX(CAST(SUBSTRING(id, 6) AS UNSIGNED)) AS maxId FROM package_activities"
+    );
+    let nextActivityNumber = (activityRows as { maxId: number }[])[0]?.maxId ?? 10000;
+
     for (const activity of activityList) {
+      nextActivityNumber += 1;
+      const activityId = `PACT_${nextActivityNumber}`;
       await connection.execute(
-        'INSERT INTO package_activities (package_id, name) VALUES (?, ?)',
-        [packageId, activity]
+        'INSERT INTO package_activities (id, package_id, name) VALUES (?, ?, ?)',
+        [activityId, packageId, activity]
       );
     }
 
     // Insert locations into Package_Locations table
     const locationList = JSON.parse(locations); // Parse locations JSON string to an array
+    const [locationRows] = await connection.execute(
+      "SELECT MAX(CAST(SUBSTRING(id, 6) AS UNSIGNED)) AS maxId FROM package_locations"
+    );
+    let nextLocationNumber = (locationRows as { maxId: number }[])[0]?.maxId ?? 10000;
+
     for (const location of locationList) {
+      nextLocationNumber += 1;
+      const locationId = `PLOC_${nextLocationNumber}`;
       await connection.execute(
-        'INSERT INTO package_locations (package_id, name) VALUES (?, ?)',
-        [packageId, location]
+        'INSERT INTO package_locations (id, package_id, name) VALUES (?, ?, ?)',
+        [locationId, packageId, location]
       );
     }
 
