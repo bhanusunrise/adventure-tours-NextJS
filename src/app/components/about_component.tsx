@@ -52,7 +52,7 @@ const AboutComponent: React.FC<AboutComponentProps> = ({ imageUrl, paragraphText
 
       {/* Second Column: Paragraph */}
       <div className="flex-[2] flex items-center">
-        <p className="text-2xl text-gray-600 leading-relaxed text-justify transition-all duration-500 ease-linear hover:text-green-900 hover:font-semibold">
+        <p className="text-2xl text-gray-600 leading-relaxed text-center transition-all duration-500 ease-linear hover:text-green-900 hover:font-semibold">
           {paragraphText}
         </p>
       </div>

@@ -35,7 +35,7 @@ const Description: React.FC<DescriptionProps> = ({ text, color }) => {
   return (
     <p
       ref={ref}
-      className={`text-xl ${color} leading-relaxed text-justify transition-all duration-700 ease-out ${
+      className={`text-xl ${color} leading-relaxed text-center transition-all duration-700 ease-out ${
         isVisible ? "fade-in" : "fade-out"
       }`}
     >

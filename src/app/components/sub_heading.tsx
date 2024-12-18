@@ -35,7 +35,7 @@ const SubHeading: React.FC<SubHeadingProps> = ({ text, color }) => {
   return (
     <p
       ref={ref}
-      className={`text-5xl font-semibold ${color} transition-all duration-700 ease-out ${
+      className={`md:text-5xl text-4xl text-center font-semibold ${color} transition-all duration-700 ease-out ${
         isVisible ? "fade-in" : "fade-out"
       }`}
     >

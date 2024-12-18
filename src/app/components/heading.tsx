@@ -35,7 +35,7 @@ const Heading: React.FC<HeadingProps> = ({ text, color }) => {
   return (
     <p
       ref={ref}
-      className={`text-6xl font-bold text-center ${color} transition-all duration-700 ease-out ${
+      className={`md:text-6xl text-5xl font-bold text-center ${color} transition-all duration-700 ease-out ${
         isVisible ? "fade-in" : "fade-out"
       }`}
     >

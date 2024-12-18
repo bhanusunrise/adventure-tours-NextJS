@@ -44,10 +44,7 @@ export default function NavBar() {
         if (entry.isIntersecting) {
           const activeSectionId = entry.target.id;
           setNavigation((prevNavigation) =>
-            prevNavigation.map((item) => ({
-              ...item,
-              current: item.href === `#${activeSectionId}`,
-            }))
+            prevNavigation.map((item) => (item.href === `#${activeSectionId}` ? { ...item, current: true } : { ...item, current: false }))
           );
         }
       });
@@ -64,24 +61,28 @@ export default function NavBar() {
   }, [navigation]);
 
   const getNavbarBgClass = () => {
-    if (navigation.find((item) => item.name === 'Home' && item.current)) {
-      return 'bg-transparent';
+    const currentSection = navigation.find((item) => item.current);
+
+    if (currentSection?.name === 'Home') {
+      return 'bg-transparent'; // Transparent background for Home
     }
     if (
-      navigation.find(
-        (item) =>
-          ['Who are we?', 'Take a Ride', 'Reach Out Us'].includes(item.name) && item.current
-      )
+      ['Who are we?', 'Take a Ride', 'Reach Out Us'].includes(currentSection?.name || '')
     ) {
-      return 'bg-gray-800/90';
+      return 'bg-gray-800/90'; // Semi-transparent dark background for other sections
     }
-    return 'bg-gray-900';
+    return 'bg-gray-900'; // Default dark background
   };
 
   return (
     <Disclosure
       as="nav"
-      className={classNames('navbar-custom', getNavbarBgClass(), 'text-gray-200 hover:bg-gray-900')}
+      className={classNames(
+        'navbar-custom', 
+        getNavbarBgClass(), 
+        'text-gray-200 hover:bg-gray-900', 
+        'transition-all duration-500 ease-in-out' // Adding transition for smooth background color change
+      )}
     >
       <div className="mx-auto px-20 sm:px-4 lg:px-20 pt-1 pb-1">
         <div className="relative flex h-20 items-center justify-between">

@@ -1,14 +1,37 @@
 'use client';
 
-import React from "react";
-import clsx from "clsx";
+import React, { useEffect, useState } from 'react';
+import clsx from 'clsx';
 
 interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   text: string; // Text to display on the button
-  color: "green" | "blue" | "red" | "yellow"; // Restrict colors to known Tailwind colors
+  color: 'green' | 'blue' | 'red' | 'yellow'; // Restrict colors to known Tailwind colors
 }
 
-const Button: React.FC<ButtonProps> = ({ text, color, className = "", ...props }) => {
+const Button: React.FC<ButtonProps> = ({ text, color, className = '', ...props }) => {
+  const [scrollDirection, setScrollDirection] = useState<'up' | 'down' | null>(null);
+  const [isVisible, setIsVisible] = useState(false);  // This will control the fade effect
+
+  // Set the initial scroll direction and visibility state
+  useEffect(() => {
+    let lastScrollY = window.scrollY;
+    
+    const handleScroll = () => {
+      const currentScrollY = window.scrollY;
+      const direction = currentScrollY > lastScrollY ? 'down' : 'up';
+      
+      if (direction !== scrollDirection) {
+        setScrollDirection(direction);
+        setIsVisible(true);  // Show the button when the user scrolls
+      }
+
+      lastScrollY = currentScrollY;
+    };
+
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, [scrollDirection]);
+
   const baseClass = `
     text-white
     border-8
@@ -58,10 +81,14 @@ const Button: React.FC<ButtonProps> = ({ text, color, className = "", ...props }
     `,
   };
 
+  const animationClass = scrollDirection === 'down' 
+    ? 'opacity-0 translate-y-10'  // Fade from bottom to top on scroll down
+    : 'opacity-0 -translate-y-10';  // Fade from top to bottom on scroll up
+
   return (
     <button
       type="button"
-      className={clsx(baseClass, colorClasses[color], className)}
+      className={clsx(baseClass, colorClasses[color], isVisible ? 'opacity-100 translate-y-0 transition-all duration-700' : animationClass, className)}
       {...props}
     >
       {text}
