@@ -18,8 +18,16 @@ interface Package {
   price: string;
   description: string;
   image_link: string;
-  locations: { name: string }[]; // assuming locations is an array of objects with a 'name' property
-  activities: { name: string }[]; // assuming activities is an array of objects with a 'name' property
+  locations: Location[];
+  activities: Activity[];
+}
+
+interface Location {
+  name: string;
+}
+
+interface Activity {
+  name: string;
 }
 
 const PackagesPage = () => {
