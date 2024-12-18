@@ -10,7 +10,7 @@ interface Activity {
   id: string;
   name: string;
 }
-
+/*
 interface Package {
   id: string;
   name: string;
@@ -20,7 +20,7 @@ interface Package {
   description: string;
   locations: Location[];
   activities: Activity[];
-}
+}*/
 
 export async function GET() {
   try {
