@@ -341,11 +341,12 @@ const PackagesPage = () => {
       </TableHead>
       <TableHead>{pkg.description}</TableHead>
       <TableHead>
-        {pkg.locations.map((loc: any) => loc.name).join(', ')}
-      </TableHead>
-      <TableHead>
-        {pkg.activities.map((act:any) => act.name).join(', ')}
-      </TableHead>
+  {pkg.locations.map((loc: { name: string }) => loc.name).join(', ')}
+</TableHead>
+<TableHead>
+  {pkg.activities.map((act: { name: string }) => act.name).join(', ')}
+</TableHead>
+
       <TableHead>
       
      <Button
