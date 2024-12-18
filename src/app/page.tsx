@@ -69,6 +69,7 @@ export default function Home() {
     'Innovation and creativity are at the core of what we do. Our team constantly pushes the boundaries to deliver unique and impactful solutions for every project we undertake.',
   ];
 
+  /*
   const destinations = [
     { imageUrl: './uploads/up_1001.jpg', name: 'Sunny Beach' },
     { imageUrl: './uploads/up_1002.jpg', name: 'Mountain View' },
@@ -78,7 +79,7 @@ export default function Home() {
     { imageUrl: './uploads/up_1006.jpg', name: 'River Adventure' },
     { imageUrl: './uploads/up_1007.jpg', name: 'Historical Sites' },
     { imageUrl: './uploads/up_1008.jpg', name: 'Hidden Waterfalls' },
-  ];
+  ];*/
 
   function handleCallNowClick(): void {
     window.location.href = 'tel:+94762278270';
