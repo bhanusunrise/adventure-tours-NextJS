@@ -1,3 +1,5 @@
+'use client';
+
 import React, { useEffect, useRef, useState } from 'react';
 import { FaMapMarkerAlt, FaUmbrellaBeach } from 'react-icons/fa'; // Location and Activity Icons
 
