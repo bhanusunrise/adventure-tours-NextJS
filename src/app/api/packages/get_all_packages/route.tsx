@@ -1,6 +1,27 @@
 import { dbConnect } from '@/app/lib/db';
 import { RowDataPacket } from 'mysql2';
 
+interface Location {
+  id: string;
+  name: string;
+}
+
+interface Activity {
+  id: string;
+  name: string;
+}
+
+interface Package {
+  id: string;
+  name: string;
+  price: number;
+  image_link: string;
+  index: number;
+  description: string;
+  locations: Location[];
+  activities: Activity[];
+}
+
 export async function GET() {
   try {
     const connection = await dbConnect(); // Connect to the database
@@ -34,13 +55,13 @@ export async function GET() {
     const result = packages.map((pkg) => ({
       ...pkg,
       locations: pkg.locations
-        ? pkg.locations.split(',').map((loc) => {
+        ? pkg.locations.split(',').map((loc: string) => {
             const [id, name] = loc.split(':');
             return { id, name };
           })
         : [],
       activities: pkg.activities
-        ? pkg.activities.split(',').map((act) => {
+        ? pkg.activities.split(',').map((act: string) => {
             const [id, name] = act.split(':');
             return { id, name };
           })
