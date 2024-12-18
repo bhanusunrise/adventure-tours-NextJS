@@ -7,6 +7,7 @@ import Label from '@/app/components/form/label';
 import Textarea from '@/app/components/form/textarea';
 import { Table, TableRow, TableHead } from '@/app/components/table';
 import ToastNotification from '@/app/components/toast_notification';
+import Modal from '@/app/components/modal';
 
 const PackagesPage = () => {
   const [locations, setLocations] = useState<string[]>([]);
@@ -24,6 +25,47 @@ const PackagesPage = () => {
   const [toastMessage, setToastMessage] = useState<string | null>(null);
 
   const [packages, setPackages] = useState<any[]>([]);
+
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [packageToDelete, setPackageToDelete] = useState<string | null>(null);
+
+
+   // Handle opening and closing the modal
+  const openModal = (id: string) => {
+    setPackageToDelete(id);
+    setIsModalOpen(true);
+  };
+
+  const closeModal = () => {
+    setIsModalOpen(false);
+    setPackageToDelete(null);
+  };
+
+  // Handle the delete action
+  const handleDeletePackage = async () => {
+    if (packageToDelete) {
+      try {
+        const response = await fetch(`/api/packages/delete_package?id=${packageToDelete}`, {
+          method: 'DELETE',
+        });
+
+        if (response.ok) {
+          setToastMessage('Package deleted successfully!');
+          setPackages((prevPackages) =>
+            prevPackages.filter((pkg) => pkg.id !== packageToDelete)
+          );
+        } else {
+          const data = await response.json();
+          setToastMessage(data.error || 'Error deleting package.');
+        }
+      } catch (error) {
+        console.error('Error:', error);
+        setToastMessage('An unexpected error occurred.');
+      } finally {
+        closeModal();
+      }
+    }
+  };
 
 
   // Handle location input change
@@ -165,15 +207,28 @@ const PackagesPage = () => {
             </div>
 
             <div className="mb-6">
-              <Label text="Upload Image" htmlFor="image-upload" />
-              <Input
-                type="file"
-                required
-                className="mt-1"
-                accept="image/*"
-                onChange={(e) => setFile(e.target.files?.[0] || null)}
-              />
-            </div>
+  <Label text="Upload Image" htmlFor="image-upload" />
+  <Input
+    type="file"
+    required
+    className="mt-1"
+    accept="image/*"
+    onChange={(e) => {
+      const selectedFile = e.target.files?.[0] || null;
+      setFile(selectedFile);
+    }}
+  />
+  {file && (
+    <div className="mt-4">
+      <img
+        src={URL.createObjectURL(file)}
+        alt="Preview"
+        className="h-24 w-24 object-cover rounded-lg"
+      />
+    </div>
+  )}
+</div>
+
 
             <div className="mb-6">
               <Label text="Description" htmlFor="description" />
@@ -277,7 +332,7 @@ const PackagesPage = () => {
     <TableHead>Actions</TableHead>
   </TableRow>
   {packages.map((pkg, index) => (
-    <TableRow key={pkg.id} className='text-gray-100'>
+    <TableRow key={pkg.id} className='text-gray-300'>
       <TableHead>{index + 1}</TableHead>
       <TableHead>{pkg.name}</TableHead>
       <TableHead>{pkg.price}</TableHead>
@@ -291,13 +346,44 @@ const PackagesPage = () => {
       <TableHead>
         {pkg.activities.map((act) => act.name).join(', ')}
       </TableHead>
-      <TableHead>—</TableHead> {/* Placeholder for future actions */}
+      <TableHead>
+      
+     <Button
+                text="Delete"
+                bgColor="bg-red-600"
+                hoverColor="hover:bg-red-700"
+                focusColor="focus:ring-red-300"
+                onClick={() => openModal(pkg.id)} // Open modal with the package id
+              />
+      </TableHead> {/* Placeholder for future actions */}
     </TableRow>
   ))}
 </Table>
 
         </div>
       </div>
+      {/* Modal for delete confirmation */}
+      <Modal isOpen={isModalOpen} onClose={closeModal}>
+        <div className="text-center">
+          <p className="text-xl font-semibold text-gray-100">Are you sure you want to delete this package?</p>
+          <div className="mt-4 flex justify-center gap-4">
+            <Button
+              text="Cancel"
+              bgColor="bg-gray-500"
+              hoverColor="hover:bg-gray-600"
+              focusColor="focus:ring-gray-300"
+              onClick={closeModal}
+            />
+            <Button
+              text="Confirm"
+              bgColor="bg-red-600"
+              hoverColor="hover:bg-red-700"
+              focusColor="focus:ring-red-300"
+              onClick={handleDeletePackage}
+            />
+          </div>
+        </div>
+      </Modal>
     </div>
   );
 };
