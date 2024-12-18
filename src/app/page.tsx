@@ -4,13 +4,15 @@ import { useEffect, useState } from 'react';
 import AboutComponent from './components/about_component';
 import Button from './components/button';
 //import ContactSection from './components/contact';
-//import Description from './components/description';
+import Description from './components/description';
 //import Destination from './components/destination';
 import Footer from './components/footer';
 import Heading from './components/heading';
 import NavBar from './components/navbar';
-//import SubHeading from './components/sub_heading';
 import Spinner from './components/spinner';
+import SubHeading from './components/sub_heading';
+import ContactSection from './components/contact';
+import Destination from './components/destination';
 
 export default function Home() {
   const [isLoading, setIsLoading] = useState(true);
@@ -69,7 +71,7 @@ export default function Home() {
     'Innovation and creativity are at the core of what we do. Our team constantly pushes the boundaries to deliver unique and impactful solutions for every project we undertake.',
   ];
 
-  /*
+  
   const destinations = [
     { imageUrl: './uploads/up_1001.jpg', name: 'Sunny Beach' },
     { imageUrl: './uploads/up_1002.jpg', name: 'Mountain View' },
@@ -79,7 +81,7 @@ export default function Home() {
     { imageUrl: './uploads/up_1006.jpg', name: 'River Adventure' },
     { imageUrl: './uploads/up_1007.jpg', name: 'Historical Sites' },
     { imageUrl: './uploads/up_1008.jpg', name: 'Hidden Waterfalls' },
-  ];*/
+  ]
 
   function handleCallNowClick(): void {
     window.location.href = 'tel:+94762278270';
@@ -119,7 +121,101 @@ export default function Home() {
         ))}
       </div>
 
-      {/* Additional sections can follow here */}
+       {/* Take a Ride Section */}
+      <div className="bg-gray-100 md:mt-72 md:mb-72 mt-20 mb-20 md:pl-36 md:pr-36 pl-8 pr-8 pt-36 pb-36" id="ride">
+        <Heading text="Wanna go a ride?" color="text-gray-600" />
+        <div className="h-40"></div>
+        <SubHeading text="Destinations" color="text-gray-600" />
+        <div className="m-10"></div>
+        <Description
+          text="With our reliable Tuk Tuk services, years of driving expertise, and a passion for sharing the local culture, we’ll ensure your adventure is both safe and exciting."
+          color="text-gray-600"
+        />
+
+        {/* Destination Grid */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6 mt-10">
+          {destinations.map((destination, index) => (
+            <Destination key={index} imageUrl={destination.imageUrl} name={destination.name} />
+          ))}
+        </div>
+
+        <div className="m-40"></div>
+        <SubHeading text="Packages" color="text-gray-600" />
+        <div className="m-10"></div>
+        <Description
+          text="With our reliable Tuk Tuk services, years of driving expertise, and a passion for sharing the local culture, we’ll ensure your adventure is both safe and exciting."
+          color="text-gray-600"
+        />
+        <div className="m-10"></div>
+        {/* Packages Grid */}
+        {/*}
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+           {packages.map((pkg, index) => (
+                <Package
+                 key={index}
+                  packageName={pkg.packageName}
+                  price={pkg.price}
+                  priceLimit={pkg.priceLimit}
+                  imageUrl={pkg.imageUrl}
+                  description={pkg.description}
+                  locations={pkg.location}
+                  activities={pkg.activities}
+                />
+              ))}
+            </div>*/}
+      </div>
+
+
+
+      <div className="md:h-40 h-0"></div>
+      {/* Contact Us Section */}
+      <div className="bg-white md:mt-72 md:pl-36 md:pr-36 md:mb-72 sm:pl-8 sm:pr-8" id="contact">
+        <div className="h-40"></div>
+        <Heading text="Reach out us" color="text-gray-600" />
+        <div className="m-20"></div>
+        <div className="grid grid-cols-1 sm:grid-cols-5 md:gap-10 sm:gap-0">
+
+          <div className="col col-span-3">
+            <div className="m-10"></div>
+           <iframe 
+  src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3960.269392066728!2d80.7640419!3d6.9775079!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3ae3817dd8000e6f%3A0x511d2aeb3484e3ef!2sArun%20Home%20Decor!5e0!3m2!1sen!2slk!4v1733515033206!5m2!1sen!2slk"
+  style={{ border: 0, width: "100%", height: "100%" }}
+  allowFullScreen
+  loading="lazy"
+  referrerPolicy="no-referrer-when-downgrade"
+></iframe>
+
+              <div className="m-48"></div>
+          </div>
+          <div
+  className="col col-span-2 bg-yellow-300 rounded-2xl pl-4 pr-4 shadow-2xl md:mx-auto mt-20 mx-4"
+  id="contact-us-section"
+>
+  <div className="m-10"></div>
+  <div className="text-center">
+    <SubHeading text="Contacts" color="text-gray-600" />
+  </div>
+  <div className="m-10"></div>
+  <ContactSection contactType="phone" description="+94776328270" />
+  <div className="m-1"></div>
+  <ContactSection contactType="phone" description="+94762278270" />
+  <div className="m-1"></div>
+  <ContactSection
+    contactType="address"
+    description="18, St Andrew's Rd, Nuwara Eliya. 22200"
+  />
+  <div className="m-1"></div>
+  <ContactSection contactType="email" description="aasanth673@gmail.com" />
+  <div className="m-10"></div>
+</div>
+
+
+
+        </div>
+        <div className="m-28"></div>
+      </div>
+
+      {/* Footer */}
       <Footer />
     </>
   );
