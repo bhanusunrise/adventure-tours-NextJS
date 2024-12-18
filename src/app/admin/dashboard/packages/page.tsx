@@ -362,17 +362,17 @@ const PackagesPage = () => {
             </TableHead>
             <TableHead>{pkg.description}</TableHead>
             <TableHead>
-              {pkg.locations
-  ? pkg.locations.split(',').map((loc: string) => {
-      const [id, name] = loc.split(':');
-      return { id, name };
-  })
-  : [] 
-}
-            </TableHead>
+  {pkg.locations
+    ? pkg.locations.map((loc: Location) => loc.name).join(', ')  // Map over the locations array and join them as a string
+    : []}
+</TableHead>
+
             <TableHead>
-                {pkg.activities.map((act) => act.name).join(', ')}
-            </TableHead>
+  {pkg.activities
+    ? pkg.activities.map((act: Activity) => act.name).join(', ')  // Map over the locations array and join them as a string
+    : []}
+</TableHead>
+
             <TableHead>
               <Button
                 text="Delete"
