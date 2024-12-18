@@ -9,6 +9,19 @@ import { Table, TableRow, TableHead } from '@/app/components/table';
 import ToastNotification from '@/app/components/toast_notification';
 import Modal from '@/app/components/modal';
 
+
+
+  // Define the type for a Package object
+interface Package {
+  id: string;
+  name: string;
+  price: string;
+  description: string;
+  image_link: string;
+  locations: { name: string }[]; // assuming locations is an array of objects with a 'name' property
+  activities: { name: string }[]; // assuming activities is an array of objects with a 'name' property
+}
+
 const PackagesPage = () => {
   const [locations, setLocations] = useState<string[]>([]);
   const [activities, setActivities] = useState<string[]>([]);
@@ -24,10 +37,10 @@ const PackagesPage = () => {
 
   const [toastMessage, setToastMessage] = useState<string | null>(null);
 
-  const [packages, setPackages] = useState<any[]>([]);
-
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [packageToDelete, setPackageToDelete] = useState<string | null>(null);
+
+  const [packages, setPackages] = useState<Package[]>([]); // Correct type for packages
 
 
    // Handle opening and closing the modal
@@ -333,30 +346,28 @@ const PackagesPage = () => {
   </TableRow>
   {packages.map((pkg, index) => (
     <TableRow key={pkg.id} className='text-gray-300'>
-      <TableHead>{index + 1}</TableHead>
-      <TableHead>{pkg.name}</TableHead>
-      <TableHead>{pkg.price}</TableHead>
-      <TableHead>
-        <img src={pkg.image_link} alt={pkg.name} className="h-12 w-12 object-cover" />
-      </TableHead>
-      <TableHead>{pkg.description}</TableHead>
-      <TableHead>
-  {pkg.locations.map((loc: { name: string }) => loc.name).join(', ')}
-</TableHead>
-<TableHead>
-  {pkg.activities.map((act: { name: string }) => act.name).join(', ')}
-</TableHead>
-
-      <TableHead>
-      
-     <Button
+            <TableHead>{index + 1}</TableHead>
+            <TableHead>{pkg.name}</TableHead>
+            <TableHead>{pkg.price}</TableHead>
+            <TableHead>
+              <img src={pkg.image_link} alt={pkg.name} className="h-12 w-12 object-cover" />
+            </TableHead>
+            <TableHead>{pkg.description}</TableHead>
+            <TableHead>
+              {pkg.locations.map((loc) => loc.name).join(', ')}
+            </TableHead>
+            <TableHead>
+              {pkg.activities.map((act) => act.name).join(', ')}
+            </TableHead>
+            <TableHead>
+              <Button
                 text="Delete"
                 bgColor="bg-red-600"
                 hoverColor="hover:bg-red-700"
                 focusColor="focus:ring-red-300"
                 onClick={() => openModal(pkg.id)} // Open modal with the package id
               />
-      </TableHead> {/* Placeholder for future actions */}
+            </TableHead>
     </TableRow>
   ))}
 </Table>
