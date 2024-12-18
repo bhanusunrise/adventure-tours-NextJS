@@ -111,7 +111,7 @@ export default function Home() {
     <Button
       text="📱 Call Now"
       color="yellow"
-      className="mt-10 px-10 py-2 text-2xl sm:text-xl md:text-2xl"
+      className="mt-10 px-10 py-2 text-2xl sm:text-xl md:text-2xl animate-bounce"
       onClick={handleCallNowClick}
     />
   </div>
