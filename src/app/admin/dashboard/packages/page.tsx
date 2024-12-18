@@ -168,20 +168,20 @@ const PackagesPage = () => {
 
 
   useEffect(() => {
-  const fetchPackages = async () => {
-    try {
-      const response = await fetch('/api/packages/get_all_packages');
-      if (response.ok) {
-        const data = await response.json();
-        setPackages(data.packages);
-      } else {
-        setToastMessage('Failed to load packages.');
-      }
-    } catch (error) {
-      console.error('Error:', error);
-      setToastMessage('An unexpected error occurred while fetching packages.');
+ const fetchPackages = async () => {
+  try {
+    const response = await fetch('/api/packages/get_all_packages');
+    if (response.ok) {
+      const data: { packages: Package[] } = await response.json(); // Explicitly typing the response data
+      setPackages(data.packages);
+    } else {
+      setToastMessage('Failed to load packages.');
     }
-  };
+  } catch (error) {
+    console.error('Error:', error);
+    setToastMessage('An unexpected error occurred while fetching packages.');
+  }
+};
 
   fetchPackages();
 }, []);
