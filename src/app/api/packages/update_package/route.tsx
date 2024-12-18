@@ -74,21 +74,25 @@ export async function PUT(req: NextRequest) {
     await connection.query('DELETE FROM package_activities WHERE package_id = ?', [id]);
     await connection.query('DELETE FROM package_locations WHERE package_id = ?', [id]);
 
-    // Update activities in Package_Activities table
+    // Generate unique IDs for activities and insert into Package_Activities table
     const activityList = JSON.parse(activities); // Parse activities JSON string to an array
+    let activityCounter = 10000;
     for (const activity of activityList) {
+      const activityId = `PACT_${activityCounter++}`;
       await connection.query(
-        'INSERT INTO package_activities (package_id, name) VALUES (?, ?)',
-        [id, activity]
+        'INSERT INTO package_activities (id, package_id, name) VALUES (?, ?, ?)',
+        [activityId, id, activity]
       );
     }
 
-    // Update locations in Package_Locations table
+    // Generate unique IDs for locations and insert into Package_Locations table
     const locationList = JSON.parse(locations); // Parse locations JSON string to an array
+    let locationCounter = 10000;
     for (const location of locationList) {
+      const locationId = `PLOC_${locationCounter++}`;
       await connection.query(
-        'INSERT INTO package_locations (package_id, name) VALUES (?, ?)',
-        [id, location]
+        'INSERT INTO package_locations (id, package_id, name) VALUES (?, ?, ?)',
+        [locationId, id, location]
       );
     }
 
