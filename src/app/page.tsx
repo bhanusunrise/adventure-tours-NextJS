@@ -1,5 +1,6 @@
 'use client'
 
+import { useEffect, useState } from "react";
 import AboutComponent from "./components/about_component";
 import Button from "./components/button";
 import ContactSection from "./components/contact";
@@ -10,8 +11,30 @@ import Heading from "./components/heading";
 import NavBar from "./components/navbar";
 //import Package from "./components/package";
 import SubHeading from "./components/sub_heading";
+import Spinner from "./components/spinner";
 
 export default function Home() {
+  const [isLoading, setIsLoading] = useState(true); // Add a loading state
+
+  useEffect(() => {
+    // Wait until the page is fully loaded
+    const handleLoad = () => setIsLoading(false);
+
+    if (document.readyState === "complete") {
+      setIsLoading(false);
+    } else {
+      window.addEventListener("load", handleLoad);
+    }
+
+    return () => window.removeEventListener("load", handleLoad);
+  }, []);
+
+  if (isLoading) {
+    return <Spinner />;
+  }
+
+
+
   const imageUrls = [
     "./uploads/up_1000.jpg",
     "./uploads/up_1001.jpg",
