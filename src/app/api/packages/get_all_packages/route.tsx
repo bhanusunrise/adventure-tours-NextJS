@@ -1,6 +1,8 @@
 import { dbConnect } from '@/app/lib/db';
 import { RowDataPacket } from 'mysql2';
 
+/*
+
 interface Location {
   id: string;
   name: string;
@@ -10,7 +12,7 @@ interface Activity {
   id: string;
   name: string;
 }
-/*
+
 interface Package {
   id: string;
   name: string;
