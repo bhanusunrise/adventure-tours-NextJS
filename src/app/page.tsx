@@ -17,9 +17,6 @@ import Map from './components/map';
 
 export default function Home() {
   const [isLoading, setIsLoading] = useState(true);
-  const logoRef = useRef<HTMLImageElement>(null);
-  const textRef = useRef<HTMLDivElement>(null);
-  const [isVisible, setIsVisible] = useState(false);
 
   const imageUrls = [
     './uploads/up_1000.jpg',
