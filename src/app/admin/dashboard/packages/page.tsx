@@ -51,8 +51,11 @@ const PackagesPage = () => {
 
   const [packages, setPackages] = useState<Package[]>([]); // Correct type for packages
 
+  const [isUpdateModalOpen, setIsUpdateModalOpen] = useState(false);
+  const [packageToUpdate, setPackageToUpdate] = useState<Package | null>(null);
 
-   // Handle opening and closing the modal
+
+   // Handle opening and closing the delete modal
   const openModal = (id: string) => {
     setPackageToDelete(id);
     setIsModalOpen(true);
@@ -62,6 +65,17 @@ const PackagesPage = () => {
     setIsModalOpen(false);
     setPackageToDelete(null);
   };
+
+  // Handle opening and closing the update modal
+  const openUpdateModal = (id: string) => {
+    setIsUpdateModalOpen(true);
+    setPackageToUpdate(id);
+  };
+
+  const closeUpdateModal = () => {
+    setIsUpdateModalOpen(false);
+    setPackageToUpdate(null);
+  }
 
   // Handle the delete action
   const handleDeletePackage = async () => {
@@ -376,6 +390,15 @@ const PackagesPage = () => {
 
             <TableHead>
               <Button
+                text="Update"
+                bgColor="bg-yellow-600"
+                hoverColor="hover:bg-yellow-700"
+                focusColor="focus:ring-yellow-300"
+                onClick={() => openUpdateModal(pkg.id)}
+
+                
+              />
+              <Button
                 text="Delete"
                 bgColor="bg-red-600"
                 hoverColor="hover:bg-red-700"
@@ -411,7 +434,153 @@ const PackagesPage = () => {
           </div>
         </div>
       </Modal>
+      {/** Model for update package */}
+      <Modal isOpen={isUpdateModalOpen} onClose={closeUpdateModal}>
+        <div className="">
+          <p className="text-xl font-semibold text-gray-100">Update Package</p>
+          <div className="mt-4 gap-4">
+                      <form onSubmit={handleAddPackage}>
+            <div className="mb-6">
+              <Label text="Package Name" htmlFor="package-name" />
+              <Input
+                type="text"
+                placeholder="Enter package name"
+                required
+                className="mt-1"
+                value={packageName}
+                onChange={(e) => setPackageName(e.target.value)}
+              />
+            </div>
+
+            <div className="mb-6">
+              <Label text="Price" htmlFor="price" />
+              <Input
+                type="number"
+                placeholder="Enter price"
+                required
+                min={0}
+                className="mt-1"
+                value={price}
+                onChange={(e) => setPrice(e.target.value)}
+              />
+            </div>
+
+            <div className="mb-6">
+  <Label text="Upload Image" htmlFor="image-upload" />
+  <Input
+    type="file"
+    required
+    className="mt-1"
+    accept="image/*"
+    onChange={(e) => {
+      const selectedFile = e.target.files?.[0] || null;
+      setFile(selectedFile);
+    }}
+  />
+  {file && (
+    <div className="mt-4">
+      <img
+        src={URL.createObjectURL(file)}
+        alt="Preview"
+        className="h-24 w-24 object-cover rounded-lg"
+      />
     </div>
+  )}
+</div>
+
+
+            <div className="mb-6">
+              <Label text="Description" htmlFor="description" />
+              <Textarea
+                placeholder="Enter package description"
+                rows={4}
+                required
+                className="mt-1"
+                value={description}
+                onChange={(e) => setDescription(e.target.value)}
+              />
+            </div>
+
+            <div className="mb-6 relative">
+              <Label text="Locations" htmlFor="locations" />
+              {locationToasts.map((location, index) => (
+                <ToastNotification
+                  key={index}
+                  message={"📍 " + location}
+                  onClose={() =>
+                    setLocationToasts((prevToasts) =>
+                      prevToasts.filter((_, i) => i !== index)
+                    )
+                  }
+                />
+              ))}
+              <Input
+                type="text"
+                placeholder="Enter locations separated by '/'"
+
+                className="mt-1"
+                value={locationInput}
+                onChange={handleLocationChange}
+              />
+            </div>
+
+            <div className="mb-6 relative">
+              <Label text="Activities" htmlFor="activities" />
+              {activityToasts.map((activity, index) => (
+                <ToastNotification
+                  key={index}
+                  message={"✅ " + activity}
+                  onClose={() =>
+                    setActivityToasts((prevToasts) =>
+                      prevToasts.filter((_, i) => i !== index)
+                    )
+                  }
+                />
+              ))}
+              <Input
+                type="text"
+                placeholder="Enter activities separated by '/'"
+
+                className="mt-1"
+                value={activityInput}
+                onChange={handleActivityChange}
+              />
+            </div>
+
+            <div className="flex gap-2">
+              <Button
+                text="Add"
+                bgColor="bg-blue-600"
+                hoverColor="hover:bg-blue-700"
+                focusColor="focus:ring-blue-300"
+                type="submit"
+              />
+              <Button
+                text="Reset"
+                bgColor="bg-gray-500"
+                hoverColor="hover:bg-gray-600"
+                focusColor="focus:ring-gray-300"
+                onClick={() => {
+                  setPackageName('');
+                  setPrice('');
+                  setDescription('');
+                  setFile(null);
+                  setLocationInput('');
+                  setActivityInput('');
+                  setLocations([]);
+                  setActivities([]);
+                  setLocationToasts([]);
+                  setActivityToasts([]);
+                }}
+              />
+            </div>
+          </form>
+          </div>
+        </div>
+      </Modal>
+    </div>
+
+    
   );
 };
 
