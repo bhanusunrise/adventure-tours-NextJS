@@ -59,6 +59,7 @@ const PackagesPage = () => {
   const openModal = (id: string) => {
     setPackageToDelete(id);
     setIsModalOpen(true);
+    console.log(packageToUpdate);
   };
 
   const closeModal = () => {
